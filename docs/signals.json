@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-15T07:18:51Z",
-  "card_count": 98,
+  "generated_at": "2026-05-15T07:30:10Z",
+  "card_count": 114,
   "live_count": 0,
   "verdict_counts": {
     "STRONG BUY": 0,
-    "BUY": 9,
-    "HOLD": 66,
-    "TRIM": 23,
+    "BUY": 13,
+    "HOLD": 77,
+    "TRIM": 24,
     "SELL": 0
   },
   "top_buys": [
@@ -27,6 +27,22 @@
       "ebay_query": "2025 Panini Prizm Draft Picks Bryce Underwood PSA 10"
     },
     {
+      "id": "K029",
+      "player": "A'ja Wilson",
+      "sport": "Basketball",
+      "set_year": "2018 Panini Prizm WNBA",
+      "grade": "PSA 10",
+      "anchor": 850,
+      "live": null,
+      "trend30d": 20.0,
+      "t_buy": 650,
+      "t_sell": 1500,
+      "pop": 340,
+      "verdict": "BUY",
+      "composite": 75.9,
+      "ebay_query": "2018 Panini Prizm WNBA A'ja Wilson RC PSA 10"
+    },
+    {
       "id": "B022",
       "player": "Konnor Griffin",
       "sport": "Baseball",
@@ -43,6 +59,22 @@
       "ebay_query": "2024 Bowman Chrome Prospects Konnor Griffin BCP-44 PSA 10"
     },
     {
+      "id": "K031",
+      "player": "JuJu Watkins",
+      "sport": "Basketball",
+      "set_year": "2025 Bowman University Chrome",
+      "grade": "PSA 10",
+      "anchor": 220,
+      "live": null,
+      "trend30d": 40.0,
+      "t_buy": 170,
+      "t_sell": 400,
+      "pop": 500,
+      "verdict": "BUY",
+      "composite": 72.5,
+      "ebay_query": "2025 Bowman University Chrome JuJu Watkins PSA 10"
+    },
+    {
       "id": "B020",
       "player": "Travis Bazzana",
       "sport": "Baseball",
@@ -57,6 +89,22 @@
       "verdict": "BUY",
       "composite": 72.2,
       "ebay_query": "2024 Bowman Chrome Prospects Travis Bazzana BCP-1 PSA 10"
+    },
+    {
+      "id": "K027",
+      "player": "Paige Bueckers",
+      "sport": "Basketball",
+      "set_year": "2025 Panini Prizm WNBA",
+      "grade": "PSA 10",
+      "anchor": 280,
+      "live": null,
+      "trend30d": 55.0,
+      "t_buy": 210,
+      "t_sell": 500,
+      "pop": 600,
+      "verdict": "BUY",
+      "composite": 71.8,
+      "ebay_query": "2025 Panini Prizm WNBA Paige Bueckers RC 1 PSA 10"
     },
     {
       "id": "F007",
@@ -89,6 +137,22 @@
       "verdict": "BUY",
       "composite": 71.5,
       "ebay_query": "2023 Panini Prizm Draft Picks Travis Hunter PSA 10"
+    },
+    {
+      "id": "X010",
+      "player": "Oscar Piastri",
+      "sport": "Other",
+      "set_year": "2023 Topps Chrome F1",
+      "grade": "PSA 10",
+      "anchor": 180,
+      "live": null,
+      "trend30d": 25.0,
+      "t_buy": 140,
+      "t_sell": 320,
+      "pop": 450,
+      "verdict": "BUY",
+      "composite": 71.3,
+      "ebay_query": "2023 Topps Chrome F1 Oscar Piastri RC 81 PSA 10"
     },
     {
       "id": "F008",
@@ -137,22 +201,6 @@
       "verdict": "BUY",
       "composite": 71.1,
       "ebay_query": "2023 Bowman Chrome Prospects Roman Anthony BCP-120 PSA 10"
-    },
-    {
-      "id": "K014",
-      "player": "AJ Dybantsa",
-      "sport": "Basketball",
-      "set_year": "2024 Bowman University Chrome",
-      "grade": "PSA 10",
-      "anchor": 140,
-      "live": null,
-      "trend30d": 50.0,
-      "t_buy": 100,
-      "t_sell": 250,
-      "pop": 600,
-      "verdict": "BUY",
-      "composite": 71.0,
-      "ebay_query": "2024 Bowman University Chrome AJ Dybantsa PSA 10"
     }
   ]
 }
