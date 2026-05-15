@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-15T07:48:17Z",
-  "card_count": 143,
+  "generated_at": "2026-05-15T08:25:10Z",
+  "card_count": 158,
   "live_count": 0,
   "verdict_counts": {
     "STRONG BUY": 0,
-    "BUY": 20,
-    "HOLD": 91,
-    "TRIM": 32,
+    "BUY": 23,
+    "HOLD": 99,
+    "TRIM": 36,
     "SELL": 0
   },
   "top_buys": [
@@ -41,6 +41,22 @@
       "verdict": "BUY",
       "composite": 76.6,
       "ebay_query": "2024 Bowman University Chrome VJ Edgecombe PSA 10"
+    },
+    {
+      "id": "X023",
+      "player": "Lamine Yamal",
+      "sport": "Other",
+      "set_year": "2024 Topps Chrome Premier League",
+      "grade": "PSA 10",
+      "anchor": 480,
+      "live": null,
+      "trend30d": 65.0,
+      "t_buy": 360,
+      "t_sell": 900,
+      "pop": 340,
+      "verdict": "BUY",
+      "composite": 76.3,
+      "ebay_query": "2024 Topps Chrome Premier League Lamine Yamal RC PSA 10"
     },
     {
       "id": "F023",
@@ -171,36 +187,20 @@
       "ebay_query": "2025 Panini Prizm WNBA Paige Bueckers RC 1 PSA 10"
     },
     {
-      "id": "X017",
-      "player": "Jude Bellingham",
-      "sport": "Other",
-      "set_year": "2020 Topps Bundesliga Chrome",
-      "grade": "PSA 10",
-      "anchor": 480,
-      "live": null,
-      "trend30d": 30.0,
-      "t_buy": 360,
-      "t_sell": 850,
-      "pop": 580,
-      "verdict": "BUY",
-      "composite": 71.7,
-      "ebay_query": "2020 Topps Chrome Bundesliga Jude Bellingham RC 1 PSA 10"
-    },
-    {
-      "id": "F007",
-      "player": "Malik Nabers",
+      "id": "F046",
+      "player": "Travis Hunter",
       "sport": "Football",
-      "set_year": "2024 Panini Prizm",
+      "set_year": "2024 Panini Prizm Draft Picks",
       "grade": "PSA 10",
-      "anchor": 110,
+      "anchor": 130,
       "live": null,
-      "trend30d": 30.0,
-      "t_buy": 80,
-      "t_sell": 200,
-      "pop": 1200,
+      "trend30d": 45.0,
+      "t_buy": 95,
+      "t_sell": 240,
+      "pop": 900,
       "verdict": "BUY",
-      "composite": 71.5,
-      "ebay_query": "2024 Panini Prizm Malik Nabers RC PSA 10"
+      "composite": 71.8,
+      "ebay_query": "2024 Panini Prizm Draft Picks Travis Hunter Colorado PSA 10"
     }
   ]
 }
