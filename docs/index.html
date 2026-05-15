@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="bpleone Sports Cards Desk — PSA-graded NBA/NFL/MLB trading framework. Composite quant scoring, live eBay sold-comps, Bowman 1st Chrome prospects, NIL autos, vintage HOFers.">
+<title>Sports Cards Desk — bpleone.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg-card: #131826;
+    --border: #232a3e;
+    --gold: #f5c842;
+    --gold-dim: #c9a73c;
+    --text: #e8ecf4;
+    --text-dim: #8b94a8;
+    --green: #4ade80;
+    --orange: #fb923c;
+    --red: #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(245,200,66,0.05) 0, transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(74,222,128,0.03) 0, transparent 40%);
+    background-attachment: fixed;
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    border-bottom: 1px solid var(--border);
+    padding: 18px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  nav .container { display: flex; align-items: center; justify-content: space-between; }
+  .nav-brand { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; letter-spacing: -0.02em; }
+  .nav-brand .dot { color: var(--gold); }
+  .nav-back { color: var(--text-dim); text-decoration: none; font-size: 14px; }
+  .nav-back:hover { color: var(--gold); }
+
+  .hero { padding: 80px 0 40px; }
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    margin-bottom: 18px;
+  }
+  .hero h1 .accent { color: var(--gold); }
+  .hero p.lede {
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(74,222,128,0.12);
+    border: 1px solid rgba(74,222,128,0.35);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 48px;
+  }
+  .stat { text-align: center; }
+  .stat .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.02em;
+  }
+  .stat .lbl {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  section.block { margin-bottom: 56px; }
+  section.block h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+  .feature {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .feature .icon { font-size: 24px; margin-bottom: 12px; }
+  .feature h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .feature p { color: var(--text-dim); font-size: 14px; line-height: 1.55; }
+
+  .formula {
+    background: rgba(245,200,66,0.04);
+    border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 20px 0;
+  }
+  .formula .gold { color: var(--gold); }
+
+  .verdict-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .verdict-pill {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .verdict-pill .name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .verdict-pill .range { color: var(--text-dim); font-size: 11px; margin-top: 4px; }
+  .v-strong-buy .name { color: var(--green); }
+  .v-buy        .name { color: #86efac; }
+  .v-hold       .name { color: var(--text-dim); }
+  .v-trim       .name { color: var(--orange); }
+  .v-sell       .name { color: var(--red); }
+
+  .cta-row {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--gold);
+    border-radius: 16px;
+    margin-bottom: 48px;
+  }
+  .cta-row .pitch {
+    flex: 1; min-width: 280px;
+  }
+  .cta-row h3 { font-size: 20px; margin-bottom: 8px; }
+  .cta-row p { color: var(--text-dim); font-size: 14px; }
+  .cta-row .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn-gold {
+    background: var(--gold); color: var(--bg);
+    padding: 12px 22px; border-radius: 8px; font-weight: 700;
+    text-decoration: none; font-size: 14px;
+    transition: transform 0.15s, background 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-gold:hover { background: var(--gold-dim); transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--text-dim);
+    padding: 12px 22px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  th { color: var(--text-dim); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  td.num { font-family: 'JetBrains Mono', monospace; text-align: right; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  footer .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-brand">bpleone<span class="dot">.</span>com / sports-cards</div>
+    <a href="https://bpleone.com" class="nav-back">← all desks</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="badge-live">● Live</div>
+    <div class="hero-eyebrow">Trading Desk · PSA-graded sports cards</div>
+    <h1>Apply the Pokémon framework to <span class="accent">PSA-graded sports cards</span>.</h1>
+    <p class="lede">98 cards across baseball, football, basketball, hockey, soccer, F1, UFC. 36 color/refractor parallels. 17 sealed-product boxes. 36 vintage HOFer grade ladders. Composite quant scoring (momentum + value + scarcity + liquidity). Live eBay sold-comp refresh. STRONG BUY / BUY / HOLD / TRIM / SELL verdicts. Inventory P&amp;L. Schedule D / Form 8949 tax helper.</p>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="num">98</div><div class="lbl">cards · watchlist</div></div>
+      <div class="stat"><div class="num">36</div><div class="lbl">color parallels</div></div>
+      <div class="stat"><div class="num">17</div><div class="lbl">sealed products</div></div>
+      <div class="stat"><div class="num">36</div><div class="lbl">vintage grades</div></div>
+      <div class="stat"><div class="num">14</div><div class="lbl">catalysts</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <div class="cta-row">
+    <div class="pitch">
+      <h3>The full Streamlit dashboard</h3>
+      <p>16 interactive pages: BUY signals, watchlist, parallels, sealed, vintage grades, by-sport, by-set, compare, sizer, charts, catalysts, inventory, journal, card detail. Connect Streamlit Cloud to deploy.</p>
+    </div>
+    <div class="actions">
+      <a class="btn-gold" href="https://github.com/Keyvaniath/bpleone-sports-cards-desk" target="_blank" rel="noopener">View source on GitHub →</a>
+      <a class="btn-ghost" href="https://github.com/Keyvaniath/bpleone-sports-cards-desk#deploy" target="_blank" rel="noopener">Deploy guide</a>
+    </div>
+  </div>
+
+  <section class="block">
+    <h2>Quant methodology</h2>
+    <p style="color:var(--text-dim); margin-bottom:20px;">Every card on the watchlist gets a composite 0-100 score:</p>
+    <div class="formula">
+      COMPOSITE = <span class="gold">0.30</span> × MOMENTUM<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + <span class="gold">0.30</span> × VALUE<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + <span class="gold">0.20</span> × SCARCITY<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + <span class="gold">0.20</span> × LIQUIDITY
+    </div>
+    <div class="verdict-list">
+      <div class="verdict-pill v-strong-buy"><div class="name">STRONG BUY</div><div class="range">≥ 85</div></div>
+      <div class="verdict-pill v-buy"><div class="name">BUY</div><div class="range">70 – 84</div></div>
+      <div class="verdict-pill v-hold"><div class="name">HOLD</div><div class="range">50 – 69</div></div>
+      <div class="verdict-pill v-trim"><div class="name">TRIM</div><div class="range">30 – 49</div></div>
+      <div class="verdict-pill v-sell"><div class="name">SELL</div><div class="range">&lt; 30</div></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>What's on the watchlist</h2>
+    <div class="grid-2">
+      <div class="feature">
+        <div class="icon">⚾</div>
+        <h3>Baseball · 33 cards</h3>
+        <p>2024 Topps Chrome Update RCs (Skenes, Wood, Holliday, Witt), Bowman 1st Chrome prospect autos (Salas, Walker Jenkins, Konnor Griffin, Bazzana), plus vintage HOFers — '52 Mantle, '54 Aaron, '55 Clemente, '63 Pete Rose.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏈</div>
+        <h3>Football · 31 cards</h3>
+        <p>2024 Panini Prizm rookie class (Caleb Williams, Jayden Daniels, Marvin Harrison Jr, Malik Nabers, Brock Bowers), 2017-2023 Prizm bedrocks (Mahomes NT auto, Burrow, Allen, Lamar), College NIL autos (Arch Manning, Shedeur, Travis Hunter, Bryce Underwood). Plus '00 SP Auth Brady, '76 Walter Payton.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏀</div>
+        <h3>Basketball · 26 cards</h3>
+        <p>Wemby base + Silver Prizm + Gold /10, Anthony Edwards, Jalen Williams, Caitlin Clark + Angel Reese WNBA, Cooper Flagg + AJ Dybantsa college. Plus the canonical vintage tier — '86 Fleer Jordan, '96 Topps Chrome Kobe, '03 Topps Chrome LeBron.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏒</div>
+        <h3>Hockey / UFC / F1 / Soccer · 8 cards</h3>
+        <p>'79 OPC Gretzky, Connor Bedard YG, Conor McGregor 2011 UFC, '04 Megacracks Messi PSA 10 ($480K grail), Verstappen + Hamilton + Leclerc 2020 Topps Chrome F1, Haaland Bundesliga.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Beyond base — parallels & sealed</h2>
+    <div class="grid-2">
+      <div class="feature">
+        <div class="icon">🌈</div>
+        <h3>36 color/refractor parallels</h3>
+        <p>The apex tier. Wemby NT RPA /99 ($78K), Caleb NT RPA, MHJ NT RPA, Skenes Topps Dynasty /10, plus the full Silver → Hyper → Color → Numbered → Gold /10 → 1/1 ladder. Print-run-aware scarcity scoring.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📦</div>
+        <h3>17 sealed boxes/cases</h3>
+        <p>Bowman Chrome HTA case, Topps Chrome Update Hobby, 2024 Panini Prizm Football Hobby/Mega, Wemby NT case, 2024 Bowman University Cooper Flagg chase. EV-based scoring (top-quartile rip EV vs floor).</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏛️</div>
+        <h3>36 vintage grade ladders</h3>
+        <p>Per-card grade-by-grade price tables for 11 vintage HOFers. '52 Mantle PSA 4 ($90K) → PSA 7 ($285K) → PSA 8 ($1.2M). Pick your entry grade, back-fill higher grades over time.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📅</div>
+        <h3>14 catalysts</h3>
+        <p>Known 2026 events that move cards: NFL Draft, NBA Lottery + Draft, MLB Trade Deadline, Heisman, PSA pop refresh, NT release. Expected-move ranges + affected card IDs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>How the dashboard works</h2>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>What it does</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>🏠 Dashboard</td><td>Headline stats, verdict mix, top BUYs, sport breakdown</td></tr>
+        <tr><td>🔍 Watchlist</td><td>Full 98-card table with sport/category/tier/verdict filters, buy-zone alerts, CSV export</td></tr>
+        <tr><td>🎯 BUY Signals</td><td>Composite ≥ 70 cards only, sorted by score</td></tr>
+        <tr><td>📊 By Sport</td><td>Separate watchlist per sport, sorted by score</td></tr>
+        <tr><td>🌈 Parallels</td><td>36 parallels filtered by sport / type / verdict</td></tr>
+        <tr><td>📦 Sealed</td><td>Boxes/cases with EV-based scoring and risk-reward</td></tr>
+        <tr><td>🏛️ Vintage Grades</td><td>Per-card grade ladder + heat-coded global spread table</td></tr>
+        <tr><td>📚 By Set</td><td>Group by parent set (2024 Panini Prizm, 2024 Bowman Chrome, etc.)</td></tr>
+        <tr><td>⚖️ Compare</td><td>Head-to-head card-vs-card with sub-score bar chart</td></tr>
+        <tr><td>🧮 Sizer</td><td>Bankroll × risk × 1/2 Kelly suggested position table</td></tr>
+        <tr><td>📈 Charts</td><td>4 Altair visualizations — composite scatter, trend distribution, verdict mix, pop scarcity</td></tr>
+        <tr><td>📅 Catalysts</td><td>Upcoming events that move prices, urgency-color-coded</td></tr>
+        <tr><td>💼 Inventory</td><td>Single + bulk CSV import, holding-period analyzer (long-term tax flip warning)</td></tr>
+        <tr><td>📓 Journal</td><td>Append-only buy/sell log with realized P&amp;L tracking</td></tr>
+        <tr><td>🃏 Card Detail</td><td>Price history chart, eBay sales table with thumbnails, direct eBay search link</td></tr>
+        <tr><td>ℹ️ Methodology</td><td>Full scoring + bankroll rules explanation</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="block">
+    <h2>Data sources</h2>
+    <div class="grid-2">
+      <div class="feature">
+        <div class="icon">🔄</div>
+        <h3>eBay sold-listings</h3>
+        <p>Primary price truth — weekly refresh via the same scraper that powers the Pokémon TCG desk. Outlier rejection + median + 30d rolling band. Optional eBay Browse API path bypasses Akamai entirely (set <code>EBAY_OAUTH_TOKEN</code>).</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📊</div>
+        <h3>PSA pop reports</h3>
+        <p>Seeded manually per card (Cloudflare blocks scraping). Quarterly refresh. Drives the scarcity sub-score directly.</p>
+      </div>
+    </div>
+    <p style="color:var(--text-dim); margin-top:16px; font-size:14px;"><strong>Zero paid subscriptions.</strong> Everything runs on free tiers.</p>
+  </section>
+
+  <section class="block">
+    <h2>Operational</h2>
+    <div class="grid-2">
+      <div class="feature">
+        <div class="icon">⏰</div>
+        <h3>Weekly refresh GitHub Action</h3>
+        <p>Sundays 22:00 UTC — pulls latest eBay sold comps, appends a price-history snapshot, commits the refreshed JSON. Sets up trend lines automatically over time.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🔔</div>
+        <h3>Discord alerts</h3>
+        <p>Webhook posts when any card flips into STRONG BUY or out into TRIM/SELL. Embeds include composite + sub-scores + direct eBay link.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📧</div>
+        <h3>Trade-of-the-day email</h3>
+        <p>SMTP digest each morning with the top BUY + runner-up + TRIM warnings, in branded HTML matching the homepage.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">💰</div>
+        <h3>Tax helper</h3>
+        <p>Schedule D / Form 8949 generator. Collectibles cap (28% long-term rate, §408(m)(2)(A)) baked in. Separates ST/LT lots automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-row">
+    <div class="pitch">
+      <h3>Run it yourself</h3>
+      <p>Clone the repo, <code>pip install -r requirements.txt</code>, <code>streamlit run streamlit_app.py</code>. Or deploy to Streamlit Community Cloud (free) and point a custom domain at the app.</p>
+    </div>
+    <div class="actions">
+      <a class="btn-gold" href="https://github.com/Keyvaniath/bpleone-sports-cards-desk" target="_blank" rel="noopener">GitHub →</a>
+      <a class="btn-ghost" href="https://share.streamlit.io" target="_blank" rel="noopener">Streamlit Cloud</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <span>© 2026 Brandon P. Leone</span>
+    <span><a href="https://bpleone.com">bpleone.com</a> · <a href="https://github.com/Keyvaniath/bpleone-sports-cards-desk">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
