@@ -17,6 +17,7 @@
 <meta name="twitter:title" content="Sports Cards Desk · bpleone.com">
 <meta name="twitter:description" content="PSA-graded sports cards. 98-card watchlist with composite quant scoring. Caleb Williams, Wemby, Skenes, '52 Mantle.">
 <link rel="canonical" href="https://bpleone.com/sports-cards/">
+<link rel="alternate" type="application/rss+xml" title="Sports Cards BUY Signals" href="https://raw.githubusercontent.com/Keyvaniath/bpleone-sports-cards-desk/main/docs/feed.xml">
 <title>Sports Cards Desk — bpleone.com</title>
 <script type="application/ld+json">
 {
@@ -329,12 +330,12 @@
     <h1>Apply the Pokémon framework to <span class="accent">PSA-graded sports cards</span>.</h1>
     <p class="lede">114 cards across baseball, football, basketball, hockey, soccer, F1, UFC, WNBA. 36 color/refractor parallels. 17 sealed-product boxes. 36 vintage HOFer grade ladders. Composite quant scoring (momentum + value + scarcity + liquidity). Live eBay sold-comp refresh. STRONG BUY / BUY / HOLD / TRIM / SELL verdicts. Inventory P&amp;L. Schedule D / Form 8949 tax helper.</p>
 
-    <div class="stat-strip">
-      <div class="stat"><div class="num">114</div><div class="lbl">cards · watchlist</div></div>
-      <div class="stat"><div class="num">36</div><div class="lbl">color parallels</div></div>
-      <div class="stat"><div class="num">17</div><div class="lbl">sealed products</div></div>
-      <div class="stat"><div class="num">36</div><div class="lbl">vintage grades</div></div>
-      <div class="stat"><div class="num">14</div><div class="lbl">catalysts</div></div>
+    <div class="stat-strip" id="sc-stat-strip">
+      <div class="stat"><div class="num" id="sc-stat-cards">114</div><div class="lbl">cards · watchlist</div></div>
+      <div class="stat"><div class="num" id="sc-stat-parallels">36</div><div class="lbl">color parallels</div></div>
+      <div class="stat"><div class="num" id="sc-stat-sealed">17</div><div class="lbl">sealed products</div></div>
+      <div class="stat"><div class="num" id="sc-stat-vintage">36</div><div class="lbl">vintage grades</div></div>
+      <div class="stat"><div class="num" id="sc-stat-buys">13</div><div class="lbl">active BUYs</div></div>
     </div>
   </div>
 </section>
@@ -652,6 +653,22 @@
 // content if the fetch fails.
 (function() {
   const SIGNALS_URL = "https://raw.githubusercontent.com/Keyvaniath/bpleone-sports-cards-desk/main/docs/signals.json";
+  const STATS_URL   = "https://raw.githubusercontent.com/Keyvaniath/bpleone-sports-cards-desk/main/docs/stats.json";
+
+  async function refreshStats() {
+    try {
+      const r = await fetch(STATS_URL + "?cb=" + Date.now());
+      if (!r.ok) return;
+      const s = await r.json();
+      const set = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.textContent = v; };
+      set("sc-stat-cards", s.card_count);
+      set("sc-stat-parallels", s.parallel_count);
+      set("sc-stat-sealed", s.sealed_count);
+      set("sc-stat-vintage", s.vintage_grade_count);
+      const buys = (s.verdict_counts && ((s.verdict_counts["STRONG BUY"] || 0) + (s.verdict_counts["BUY"] || 0))) || 0;
+      set("sc-stat-buys", buys);
+    } catch (e) { /* keep static */ }
+  }
 
   function trendColor(pct) {
     return pct >= 0 ? "#22c55e" : "#fb923c";
@@ -728,7 +745,9 @@
   }
 
   refresh();
+  refreshStats();
   setInterval(refresh, 5 * 60 * 1000);
+  setInterval(refreshStats, 5 * 60 * 1000);
 })();
 </script>
 </body>
