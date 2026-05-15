@@ -152,8 +152,8 @@ with st.sidebar:
     view = st.radio(
         "View",
         ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "🌈 Parallels",
-         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "📅 Catalysts", "💼 Inventory",
-         "📓 Journal", "🃏 Card Detail", "ℹ️ Methodology"],
+         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "📈 Charts", "📅 Catalysts",
+         "💼 Inventory", "📓 Journal", "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
@@ -976,6 +976,104 @@ def page_sizer():
                     unsafe_allow_html=True)
 
 
+def page_charts():
+    st.markdown("## Charts")
+    st.caption("Visual scan across the watchlist. Spot undervalued cards, momentum clusters, and tier mix.")
+
+    # Build full dataframe
+    rows = []
+    for card in CARDS:
+        d = card_dict(card)
+        s = scores_by_id.get(d["id"])
+        if not s:
+            continue
+        rows.append({
+            "ID": d["id"],
+            "Sport": d["sport"],
+            "Tier": d["tier"],
+            "Player": d["player"],
+            "Anchor": d["price"],
+            "Live": s.live_price if s.live_price else d["price"],
+            "Score": s.composite,
+            "Trend30d": d["trend30d"] * 100,
+            "Pop": d["pop"],
+            "Verdict": s.verdict,
+        })
+    df = pd.DataFrame(rows)
+
+    # --- Composite vs price scatter ---
+    st.markdown("##### Composite Score vs Anchor Price")
+    st.caption("Top-right quadrant = expensive + high score (institutional plays). "
+               "Top-left = cheap + high score (highest expected return).")
+    import altair as alt
+    chart = (
+        alt.Chart(df)
+        .mark_circle(size=120, opacity=0.85)
+        .encode(
+            x=alt.X("Anchor:Q", scale=alt.Scale(type="log"), title="Anchor Price (log $)"),
+            y=alt.Y("Score:Q", title="Composite Score"),
+            color=alt.Color("Verdict:N", scale=alt.Scale(
+                domain=["STRONG BUY", "BUY", "HOLD", "TRIM", "SELL"],
+                range=["#22c55e", "#86efac", "#8b94a8", "#fb923c", "#f87171"],
+            )),
+            tooltip=["ID", "Player", "Sport", "Tier", "Anchor", "Score", "Verdict"],
+            shape=alt.Shape("Sport:N"),
+        )
+        .properties(height=420)
+        .interactive()
+    )
+    st.altair_chart(chart, use_container_width=True)
+
+    # --- 30-day trend distribution ---
+    st.markdown("##### 30-Day Trend Distribution by Sport")
+    trend_chart = (
+        alt.Chart(df)
+        .mark_bar(opacity=0.8)
+        .encode(
+            x=alt.X("Trend30d:Q", bin=alt.Bin(maxbins=20), title="30-Day Trend (%)"),
+            y=alt.Y("count()", title="Cards"),
+            color="Sport:N",
+            tooltip=["count()", "Sport"],
+        )
+        .properties(height=280)
+    )
+    st.altair_chart(trend_chart, use_container_width=True)
+
+    # --- Verdict mix by sport ---
+    st.markdown("##### Verdict Mix by Sport")
+    verdict_chart = (
+        alt.Chart(df)
+        .mark_bar()
+        .encode(
+            x=alt.X("Sport:N", title=None),
+            y=alt.Y("count():Q", title="Cards"),
+            color=alt.Color("Verdict:N", scale=alt.Scale(
+                domain=["STRONG BUY", "BUY", "HOLD", "TRIM", "SELL"],
+                range=["#22c55e", "#86efac", "#8b94a8", "#fb923c", "#f87171"],
+            )),
+            tooltip=["Sport", "Verdict", "count()"],
+        )
+        .properties(height=280)
+    )
+    st.altair_chart(verdict_chart, use_container_width=True)
+
+    # --- Pop scarcity vs price ---
+    st.markdown("##### Scarcity (PSA pop) vs Price")
+    pop_chart = (
+        alt.Chart(df[df["Pop"] > 0])
+        .mark_circle(size=80, opacity=0.7)
+        .encode(
+            x=alt.X("Pop:Q", scale=alt.Scale(type="log"), title="PSA Pop (log)"),
+            y=alt.Y("Anchor:Q", scale=alt.Scale(type="log"), title="Anchor Price (log $)"),
+            color=alt.Color("Tier:N"),
+            tooltip=["ID", "Player", "Sport", "Pop", "Anchor", "Tier"],
+        )
+        .properties(height=380)
+        .interactive()
+    )
+    st.altair_chart(pop_chart, use_container_width=True)
+
+
 def page_journal():
     st.markdown("## Trade Journal")
     st.caption("Append-only buy/sell log with notes. Use to track thesis vs outcome.")
@@ -1219,6 +1317,8 @@ elif view.startswith("⚖️"):
     page_compare()
 elif view.startswith("🧮"):
     page_sizer()
+elif view.startswith("📈"):
+    page_charts()
 elif view.startswith("📅"):
     page_catalysts()
 elif view.startswith("📓"):
