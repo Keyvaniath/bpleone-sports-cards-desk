@@ -1,0 +1,113 @@
+{
+  "generated_at": "2026-05-15T07:32:45Z",
+  "card_count": 114,
+  "parallel_count": 36,
+  "sealed_count": 17,
+  "vintage_grade_count": 36,
+  "catalyst_count": 14,
+  "total_book_value": 1414280,
+  "verdict_counts": {
+    "BUY": 13,
+    "HOLD": 77,
+    "TRIM": 24
+  },
+  "by_sport": {
+    "Baseball": {
+      "count": 36,
+      "book_value": 325515,
+      "buys": 3,
+      "avg_score": 55.3,
+      "trend30d_avg": 7.7
+    },
+    "Football": {
+      "count": 31,
+      "book_value": 208115,
+      "buys": 4,
+      "avg_score": 57.3,
+      "trend30d_avg": 13.5
+    },
+    "Basketball": {
+      "count": 31,
+      "book_value": 359460,
+      "buys": 5,
+      "avg_score": 57.1,
+      "trend30d_avg": 13.0
+    },
+    "Other": {
+      "count": 16,
+      "book_value": 521190,
+      "buys": 1,
+      "avg_score": 62.7,
+      "trend30d_avg": 12.6
+    }
+  },
+  "by_tier": {
+    "T1": 48,
+    "T2": 54,
+    "T3": 12
+  },
+  "top_gainers_30d": [
+    {
+      "id": "F023",
+      "player": "Bryce Underwood",
+      "trend30d": 60.0
+    },
+    {
+      "id": "K011",
+      "player": "Cooper Flagg",
+      "trend30d": 60.0
+    },
+    {
+      "id": "K027",
+      "player": "Paige Bueckers",
+      "trend30d": 55.0
+    },
+    {
+      "id": "B022",
+      "player": "Konnor Griffin",
+      "trend30d": 50.0
+    },
+    {
+      "id": "F016",
+      "player": "Arch Manning",
+      "trend30d": 50.0
+    }
+  ],
+  "top_losers_30d": [
+    {
+      "id": "B036",
+      "player": "Spencer Strider",
+      "trend30d": -15.0
+    },
+    {
+      "id": "B014",
+      "player": "Druw Jones",
+      "trend30d": -20.0
+    },
+    {
+      "id": "F019",
+      "player": "Quinn Ewers",
+      "trend30d": -20.0
+    },
+    {
+      "id": "K012",
+      "player": "Bronny James",
+      "trend30d": -20.0
+    },
+    {
+      "id": "F027",
+      "player": "CJ Stroud",
+      "trend30d": -20.0
+    }
+  ],
+  "upcoming_catalysts": [
+    {
+      "date": "2026-05-25",
+      "days_out": 10,
+      "sport": "Basketball",
+      "kind": "draft",
+      "title": "2026 NBA Draft Lottery",
+      "expected_move": "+10% to +30%"
+    }
+  ]
+}
