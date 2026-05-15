@@ -19,6 +19,7 @@ from cards_data import CARDS
 from quant_score import score_all, score_card
 from sealed_products import SEALED, SEALED_COLS, score_sealed
 from parallels import PARALLELS, PARALLEL_COLS, score_parallel
+from catalysts import CATALYSTS
 import price_history
 
 # Column index map for CARDS tuples
@@ -151,7 +152,8 @@ with st.sidebar:
     view = st.radio(
         "View",
         ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "🌈 Parallels",
-         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "💼 Inventory", "🃏 Card Detail", "ℹ️ Methodology"],
+         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "📅 Catalysts", "💼 Inventory",
+         "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
@@ -508,6 +510,32 @@ def page_inventory():
                         f"<div class='value' style='color:{color}'>${total_pnl:,.0f}</div>"
                         f"<div class='sub' style='color:{color}'>{total_pct:+.1f}%</div></div>", unsafe_allow_html=True)
 
+        # Holding-period analysis — collectibles long-term threshold is 1 year (then capped at 28%)
+        today = datetime.now().date()
+        for r in rows:
+            try:
+                buy_d = datetime.fromisoformat(r["Buy Date"]).date()
+                days_held = (today - buy_d).days
+                r["Days Held"] = days_held
+                r["Days to LT"] = max(0, 365 - days_held)
+                r["Tax Tier"] = "Long" if days_held >= 365 else "Short"
+            except Exception:
+                r["Days Held"] = None
+                r["Days to LT"] = None
+                r["Tax Tier"] = "?"
+
+        # Surface positions approaching the long-term flip (within 30 days)
+        near_lt = [r for r in rows if r.get("Days to LT") is not None and 0 < r["Days to LT"] <= 30 and r.get("P&L $", 0) > 0]
+        if near_lt:
+            st.markdown(f"#### ⏳ {len(near_lt)} position(s) approaching long-term flip (≤30 days)")
+            st.caption("Holding past 365 days drops the rate from short-term (~37%) to the collectibles long-term cap (28%).")
+            nlt_df = pd.DataFrame(near_lt)[["ID", "Player", "Qty", "Days Held", "Days to LT", "P&L $", "P&L %"]]
+            st.dataframe(
+                nlt_df.style.format({"P&L $": "${:+,.0f}", "P&L %": "{:+.1f}%"}),
+                use_container_width=True, hide_index=True,
+            )
+
+        df = pd.DataFrame(rows)
         styled = df.style.format({
             "Cost $": "${:,.2f}",
             "Live $": "${:,.2f}",
@@ -948,6 +976,70 @@ def page_sizer():
                     unsafe_allow_html=True)
 
 
+def page_catalysts():
+    st.markdown("## Catalysts Calendar")
+    st.caption("Known events that move sports card prices. Use to time entries and exits, "
+               "or to flag positions before they re-rate.")
+
+    today = datetime.now().date()
+    rows = []
+    for c in CATALYSTS:
+        date_iso, sport, kind, title, affected, expected, notes = c
+        evt_date = datetime.fromisoformat(date_iso).date()
+        days_out = (evt_date - today).days
+        affected_names = ", ".join(
+            next((c[COL["player"]] for c in CARDS if c[COL["id"]] == cid), "?")
+            for cid in affected[:4]
+        ) + (f" + {len(affected) - 4} more" if len(affected) > 4 else "")
+        rows.append({
+            "Date": date_iso,
+            "Days Out": days_out,
+            "Sport": sport,
+            "Type": kind,
+            "Event": title,
+            "Expected Move": expected,
+            "Affected Cards": affected_names or "—",
+            "Notes": notes,
+        })
+
+    df = pd.DataFrame(rows).sort_values("Date")
+
+    # Upcoming filter
+    show_past = st.checkbox("Show past catalysts", value=False)
+    if not show_past:
+        df = df[df["Days Out"] >= -7]
+
+    # Stats
+    upcoming_count = (df["Days Out"] >= 0).sum()
+    next_7 = df[(df["Days Out"] >= 0) & (df["Days Out"] <= 30)]
+    cols = st.columns(3)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Tracked Events</div>"
+                    f"<div class='value'>{len(df)}</div></div>", unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Upcoming</div>"
+                    f"<div class='value'>{upcoming_count}</div></div>", unsafe_allow_html=True)
+    with cols[2]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Next 30 days</div>"
+                    f"<div class='value' style='color:{GOLD}'>{len(next_7)}</div></div>",
+                    unsafe_allow_html=True)
+
+    # Color by urgency
+    def color_days(val):
+        if pd.isna(val):
+            return ""
+        if val < 0:
+            return f"background-color: {BG_CARD}; color: {TEXT_DIM}"
+        if val <= 7:
+            return f"background-color: {GOLD}; color: #0a0e1a; font-weight: 700"
+        if val <= 30:
+            return f"background-color: #2a3045; color: #e8ecf4"
+        return ""
+
+    styled = df.style.map(color_days, subset=["Days Out"])
+    st.dataframe(styled, use_container_width=True, hide_index=True, height=550)
+
+
 def page_methodology():
     st.markdown("## Methodology")
     st.markdown("""
@@ -1015,6 +1107,8 @@ elif view.startswith("⚖️"):
     page_compare()
 elif view.startswith("🧮"):
     page_sizer()
+elif view.startswith("📅"):
+    page_catalysts()
 elif view.startswith("💼"):
     page_inventory()
 elif view.startswith("🃏"):
