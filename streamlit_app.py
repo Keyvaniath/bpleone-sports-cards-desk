@@ -20,6 +20,7 @@ from quant_score import score_all, score_card
 from sealed_products import SEALED, SEALED_COLS, score_sealed
 from parallels import PARALLELS, PARALLEL_COLS, score_parallel
 from catalysts import CATALYSTS
+from vintage_matrix import VINTAGE_LADDER, VL_COLS
 import price_history
 
 # Column index map for CARDS tuples
@@ -149,14 +150,29 @@ with st.sidebar:
     st.caption("PSA-graded · NBA · NFL · MLB · more")
     st.markdown("---")
 
+    # Quick jump search — type anything and hit Enter to jump to first match's detail
+    quick = st.text_input("🔎 Jump to card", placeholder="Player or set...", key="quick_jump")
+
     view = st.radio(
         "View",
         ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "🌈 Parallels",
-         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "📈 Charts", "📅 Catalysts",
-         "💼 Inventory", "📓 Journal", "🃏 Card Detail", "ℹ️ Methodology"],
+         "📦 Sealed", "🏛️ Vintage Grades", "📚 By Set", "⚖️ Compare", "🧮 Sizer",
+         "📈 Charts", "📅 Catalysts", "💼 Inventory", "📓 Journal",
+         "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
+
+    # If user typed a quick-jump query, override view to Card Detail and remember match
+    if quick and quick.strip():
+        match = next(
+            (c for c in CARDS if quick.strip().lower() in (c[COL["player"]] + " " + c[COL["set_year"]] + " " + c[COL["id"]]).lower()),
+            None,
+        )
+        if match:
+            st.session_state["quick_match_id"] = match[COL["id"]]
+            view = "🃏 Card Detail"
+            st.caption(f"Jumped to {match[COL['id']]} · {match[COL['player']]}")
 
     st.markdown("---")
     st.caption(f"Cards: {len(CARDS)}")
@@ -171,7 +187,7 @@ with st.sidebar:
         st.caption("Prices: not yet refreshed")
     n_live = len(live_prices)
     st.caption(f"Live cards: {n_live}/{len(CARDS)}")
-    if st.button("🔄 Reload prices", use_container_width=True):
+    if st.button("🔄 Reload prices", width='stretch'):
         st.cache_data.clear()
         st.rerun()
 
@@ -202,7 +218,7 @@ def render_dataframe(df: pd.DataFrame, *, show_live_only: bool = False) -> None:
     styled = styled.format({"30d %": lambda v: f"{v:+.1f}%" if not pd.isna(v) else "—"})
     if "Score" in df.columns:
         styled = styled.format({"Score": lambda v: f"{v:.1f}" if not pd.isna(v) else "—"})
-    st.dataframe(styled, use_container_width=True, hide_index=True, height=600)
+    st.dataframe(styled, width='stretch', hide_index=True, height=600)
 
 
 # ----------------------------------------------------------------------
@@ -264,7 +280,7 @@ def page_dashboard():
             for sport, cnt in Counter(c[COL["sport"]] for c in CARDS).most_common()
         ])
         styled = sport_df.style.format({"Book $": "${:,.0f}", "Median $": "${:,.0f}"})
-        st.dataframe(styled, use_container_width=True, hide_index=True)
+        st.dataframe(styled, width='stretch', hide_index=True)
 
     st.markdown("---")
     st.markdown("##### Top 10 STRONG BUYs / BUYs")
@@ -356,7 +372,7 @@ def page_watchlist():
                 lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
                 subset=["Verdict"],
             ).format({"Live $": "${:,.0f}", "Buy <": "${:,.0f}", "Score": "{:.1f}"}),
-            use_container_width=True, hide_index=True,
+            width='stretch', hide_index=True,
         )
         st.markdown("---")
 
@@ -370,7 +386,7 @@ def page_watchlist():
             data=csv,
             file_name=f"sports_cards_watchlist_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv",
-            use_container_width=True,
+            width='stretch',
         )
 
     render_dataframe(df)
@@ -572,7 +588,7 @@ def page_inventory():
             nlt_df = pd.DataFrame(near_lt)[["ID", "Player", "Qty", "Days Held", "Days to LT", "P&L $", "P&L %"]]
             st.dataframe(
                 nlt_df.style.format({"P&L $": "${:+,.0f}", "P&L %": "{:+.1f}%"}),
-                use_container_width=True, hide_index=True,
+                width='stretch', hide_index=True,
             )
 
         df = pd.DataFrame(rows)
@@ -584,14 +600,19 @@ def page_inventory():
             "P&L $": "${:+,.0f}",
             "P&L %": "{:+.1f}%",
         })
-        st.dataframe(styled, use_container_width=True, hide_index=True)
+        st.dataframe(styled, width='stretch', hide_index=True)
 
 
 def page_card_detail():
     st.markdown("## Card Detail")
+    all_ids = [c[COL["id"]] for c in CARDS]
+    default_idx = 0
+    if "quick_match_id" in st.session_state and st.session_state["quick_match_id"] in all_ids:
+        default_idx = all_ids.index(st.session_state["quick_match_id"])
     card_pick = st.selectbox(
         "Pick a card",
-        options=[c[COL["id"]] for c in CARDS],
+        options=all_ids,
+        index=default_idx,
         format_func=lambda cid: f"{cid}  ·  {next(c[COL['player']] for c in CARDS if c[COL['id']]==cid)} — {next(c[COL['set_year']] for c in CARDS if c[COL['id']]==cid)} {next(c[COL['grade']] for c in CARDS if c[COL['id']]==cid)}",
     )
     card = next(c for c in CARDS if c[COL["id"]] == card_pick)
@@ -659,7 +680,7 @@ def page_card_detail():
         if first_img:
             cols = st.columns([1, 3])
             with cols[0]:
-                st.image(first_img, use_container_width=True)
+                st.image(first_img, width='stretch')
             with cols[1]:
                 st.markdown("##### Recent eBay Sales")
                 sdf = pd.DataFrame(sales)
@@ -667,7 +688,7 @@ def page_card_detail():
                     sdf["title"] = sdf["title"].str.slice(0, 90)
                 if "image" in sdf.columns:
                     sdf = sdf.drop(columns=["image"])
-                st.dataframe(sdf, use_container_width=True, hide_index=True)
+                st.dataframe(sdf, width='stretch', hide_index=True)
         else:
             st.markdown("##### Recent eBay Sales")
             sdf = pd.DataFrame(sales)
@@ -675,7 +696,7 @@ def page_card_detail():
                 sdf["title"] = sdf["title"].str.slice(0, 90)
             if "image" in sdf.columns:
                 sdf = sdf.drop(columns=["image"])
-            st.dataframe(sdf, use_container_width=True, hide_index=True)
+            st.dataframe(sdf, width='stretch', hide_index=True)
     else:
         st.info("No live sales loaded for this card yet. Run `python live_prices.py` to refresh.")
 
@@ -778,7 +799,7 @@ def page_sealed():
                     f"<div class='value' style='color:{color}'>{avg_apprec:+.1f}%</div></div>",
                     unsafe_allow_html=True)
 
-    st.dataframe(styled, use_container_width=True, hide_index=True, height=500)
+    st.dataframe(styled, width='stretch', hide_index=True, height=500)
 
 
 def page_parallels():
@@ -861,7 +882,7 @@ def page_parallels():
         lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
         subset=["Verdict"],
     )
-    st.dataframe(styled, use_container_width=True, hide_index=True, height=550)
+    st.dataframe(styled, width='stretch', hide_index=True, height=550)
 
 
 def page_compare():
@@ -1000,7 +1021,7 @@ def page_sizer():
         lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
         subset=["Verdict"],
     )
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(styled, width='stretch', hide_index=True)
 
     total_deployed = df["Suggested $"].sum()
     cash_remaining = bankroll - total_deployed
@@ -1014,6 +1035,110 @@ def page_sizer():
         st.markdown(f"<div class='stat-card'><div class='label'>Cash remaining</div>"
                     f"<div class='value' style='color:{TEXT_DIM}'>${cash_remaining:,.0f}</div></div>",
                     unsafe_allow_html=True)
+
+
+def page_vintage_grades():
+    st.markdown("## Vintage Grade Ladder")
+    st.caption("PSA grade-by-grade price ladder for the vintage HOFers. "
+               "Compare entry grades and the spread between them — pick the grade that fits your bankroll, "
+               "back-fill higher grades over time.")
+
+    # Group by card
+    by_card: dict[str, list[tuple]] = {}
+    for row in VINTAGE_LADDER:
+        by_card.setdefault(row[VL_COLS["base_id"]], []).append(row)
+
+    for base_id, rows in by_card.items():
+        card = next((c for c in CARDS if c[COL["id"]] == base_id), None)
+        if not card:
+            continue
+        d = card_dict(card)
+        st.markdown(f"##### {d['player']} — {d['set_year']}")
+        st.caption(f"{d['notes']}")
+
+        ladder = []
+        for r in sorted(rows, key=lambda x: x[VL_COLS["market_price"]]):
+            spread = r[VL_COLS["spread_pct"]]
+            ladder.append({
+                "Grade": r[VL_COLS["grade"]],
+                "Market $": r[VL_COLS["market_price"]],
+                "Recent Sales (90d)": r[VL_COLS["n_recent"]],
+                "Premium vs prior": (f"+{spread*100:.0f}%" if spread else "—"),
+                "Appeal": r[VL_COLS["entry_appeal"]],
+            })
+        ldf = pd.DataFrame(ladder)
+        styled = ldf.style.format({"Market $": "${:,.0f}"})
+        st.dataframe(styled, width='stretch', hide_index=True)
+        st.markdown("---")
+
+    # Aggregate stats
+    st.markdown("##### Grade Spread Heatmap")
+    st.caption("Premium each grade jump adds. Bigger jumps = more reward for upgrading.")
+    spread_rows = [
+        {
+            "Player": r[VL_COLS["player"]],
+            "Set": r[VL_COLS["set_year"]],
+            "Grade": r[VL_COLS["grade"]],
+            "Market $": r[VL_COLS["market_price"]],
+            "Spread vs prior": r[VL_COLS["spread_pct"]] * 100 if r[VL_COLS["spread_pct"]] else 0,
+        }
+        for r in VINTAGE_LADDER
+    ]
+    sdf = pd.DataFrame(spread_rows)
+    styled = sdf.style.format({"Market $": "${:,.0f}", "Spread vs prior": "{:+.0f}%"})
+    # Heat-color the spread column
+    def hot(val):
+        if pd.isna(val) or val == 0:
+            return ""
+        if val > 200:
+            return "background-color: #4ade80; color: #0a0e1a; font-weight: 700"
+        if val > 100:
+            return "background-color: #86efac; color: #0a0e1a"
+        if val > 50:
+            return "background-color: #fbbf24; color: #0a0e1a"
+        return ""
+    styled = styled.map(hot, subset=["Spread vs prior"])
+    st.dataframe(styled, width='stretch', hide_index=True, height=500)
+
+
+def page_by_set():
+    st.markdown("## By Set")
+    st.caption("Group cards by parent product release. Useful for set-completion research, "
+               "or to see how a class' Prizm checklist is performing as a whole.")
+
+    by_set: dict[str, list[tuple]] = {}
+    for c in CARDS:
+        # Normalize set: strip year ('2024 Topps Chrome Update' stays as-is; '2018 Topps Chrome' grouped)
+        s = c[COL["set_year"]]
+        by_set.setdefault(s, []).append(c)
+
+    rows = []
+    for set_name, cards in by_set.items():
+        scored = [scores_by_id.get(c[COL["id"]]) for c in cards]
+        scored = [s for s in scored if s]
+        avg_score = sum(s.composite for s in scored) / max(1, len(scored))
+        book = sum(c[COL["price"]] for c in cards)
+        n_buy = sum(1 for s in scored if s.verdict.endswith("BUY"))
+        sports = sorted({c[COL["sport"]] for c in cards})
+        rows.append({
+            "Set": set_name,
+            "Sport(s)": ", ".join(sports),
+            "Cards": len(cards),
+            "Book $": book,
+            "Avg Score": avg_score,
+            "BUYs": n_buy,
+        })
+    df = pd.DataFrame(rows).sort_values("Avg Score", ascending=False)
+    styled = df.style.format({"Book $": "${:,.0f}", "Avg Score": "{:.1f}"})
+    st.dataframe(styled, width='stretch', hide_index=True, height=320)
+
+    # Drill-down
+    st.markdown("##### Drill into a set")
+    set_pick = st.selectbox("Set", options=df["Set"].tolist())
+    cards = by_set[set_pick]
+    drill_rows = [card_to_row(c) for c in cards]
+    drill_df = pd.DataFrame(drill_rows).sort_values("Score", ascending=False, na_position="last")
+    render_dataframe(drill_df)
 
 
 def page_charts():
@@ -1062,7 +1187,7 @@ def page_charts():
         .properties(height=420)
         .interactive()
     )
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart, width='stretch')
 
     # --- 30-day trend distribution ---
     st.markdown("##### 30-Day Trend Distribution by Sport")
@@ -1077,7 +1202,7 @@ def page_charts():
         )
         .properties(height=280)
     )
-    st.altair_chart(trend_chart, use_container_width=True)
+    st.altair_chart(trend_chart, width='stretch')
 
     # --- Verdict mix by sport ---
     st.markdown("##### Verdict Mix by Sport")
@@ -1095,7 +1220,7 @@ def page_charts():
         )
         .properties(height=280)
     )
-    st.altair_chart(verdict_chart, use_container_width=True)
+    st.altair_chart(verdict_chart, width='stretch')
 
     # --- Pop scarcity vs price ---
     st.markdown("##### Scarcity (PSA pop) vs Price")
@@ -1111,7 +1236,7 @@ def page_charts():
         .properties(height=380)
         .interactive()
     )
-    st.altair_chart(pop_chart, use_container_width=True)
+    st.altair_chart(pop_chart, width='stretch')
 
 
 def page_journal():
@@ -1218,7 +1343,7 @@ def page_journal():
         lambda v: f"background-color: {GREEN if v=='BUY' else RED}; color: #0a0e1a; font-weight: 700",
         subset=["Action"],
     )
-    st.dataframe(styled, use_container_width=True, hide_index=True)
+    st.dataframe(styled, width='stretch', hide_index=True)
 
     csv = df.to_csv(index=False).encode("utf-8")
     st.download_button("⬇ Export journal CSV", data=csv,
@@ -1287,7 +1412,7 @@ def page_catalysts():
         return ""
 
     styled = df.style.map(color_days, subset=["Days Out"])
-    st.dataframe(styled, use_container_width=True, hide_index=True, height=550)
+    st.dataframe(styled, width='stretch', hide_index=True, height=550)
 
 
 def page_methodology():
@@ -1353,6 +1478,10 @@ elif view.startswith("🌈"):
     page_parallels()
 elif view.startswith("📦"):
     page_sealed()
+elif view.startswith("🏛"):
+    page_vintage_grades()
+elif view.startswith("📚"):
+    page_by_set()
 elif view.startswith("⚖️"):
     page_compare()
 elif view.startswith("🧮"):
