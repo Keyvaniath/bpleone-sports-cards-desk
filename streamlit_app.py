@@ -338,7 +338,39 @@ def page_watchlist():
     if df.empty:
         st.info("No matches. Loosen filters.")
         return
-    st.caption(f"{len(df)} cards · book ${df['Anchor $'].sum():,.0f}")
+
+    # Buy-zone alerts: live price within 5% of t_buy
+    in_buy_zone = []
+    for r in rows:
+        if r["Live $"] is None or pd.isna(r["Live $"]):
+            continue
+        if r["Buy <"] and r["Live $"] <= r["Buy <"] * 1.05:
+            in_buy_zone.append(r)
+    if in_buy_zone:
+        st.markdown(f"#### 🚨 {len(in_buy_zone)} card(s) in buy zone (live ≤ buy + 5%)")
+        bz_df = pd.DataFrame(in_buy_zone)[["ID", "Player", "Grade", "Live $", "Buy <", "Score", "Verdict"]]
+        st.dataframe(
+            bz_df.style.map(
+                lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
+                subset=["Verdict"],
+            ).format({"Live $": "${:,.0f}", "Buy <": "${:,.0f}", "Score": "{:.1f}"}),
+            use_container_width=True, hide_index=True,
+        )
+        st.markdown("---")
+
+    head = st.columns([4, 1])
+    with head[0]:
+        st.caption(f"{len(df)} cards · book ${df['Anchor $'].sum():,.0f}")
+    with head[1]:
+        csv = df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "⬇ CSV",
+            data=csv,
+            file_name=f"sports_cards_watchlist_{datetime.now().strftime('%Y%m%d')}.csv",
+            mime="text/csv",
+            use_container_width=True,
+        )
+
     render_dataframe(df)
 
 
@@ -554,13 +586,34 @@ def page_card_detail():
 
     sales = live.get("last_sales") or []
     if sales:
-        st.markdown("##### Recent eBay Sales")
-        sdf = pd.DataFrame(sales)
-        if "title" in sdf.columns:
-            sdf["title"] = sdf["title"].str.slice(0, 90)
-        st.dataframe(sdf, use_container_width=True, hide_index=True)
+        # Show image from first sold listing if available
+        first_img = next((s.get("image") for s in sales if s.get("image")), None)
+        if first_img:
+            cols = st.columns([1, 3])
+            with cols[0]:
+                st.image(first_img, use_container_width=True)
+            with cols[1]:
+                st.markdown("##### Recent eBay Sales")
+                sdf = pd.DataFrame(sales)
+                if "title" in sdf.columns:
+                    sdf["title"] = sdf["title"].str.slice(0, 90)
+                if "image" in sdf.columns:
+                    sdf = sdf.drop(columns=["image"])
+                st.dataframe(sdf, use_container_width=True, hide_index=True)
+        else:
+            st.markdown("##### Recent eBay Sales")
+            sdf = pd.DataFrame(sales)
+            if "title" in sdf.columns:
+                sdf["title"] = sdf["title"].str.slice(0, 90)
+            if "image" in sdf.columns:
+                sdf = sdf.drop(columns=["image"])
+            st.dataframe(sdf, use_container_width=True, hide_index=True)
     else:
         st.info("No live sales loaded for this card yet. Run `python live_prices.py` to refresh.")
+
+    # Direct eBay search link — always present
+    ebay_url = "https://www.ebay.com/sch/i.html?_nkw=" + d["ebay_query"].replace(" ", "+") + "&LH_Sold=1&LH_Complete=1"
+    st.markdown(f"[🔗 View live eBay sold comps for this card]({ebay_url})")
 
 
 def page_sealed():

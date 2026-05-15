@@ -200,10 +200,24 @@ def _parse_sales(html: str, min_price: float, max_results: int) -> list[dict]:
         if price is None or price < min_price:
             continue
         date = _extract_date(blk)
-        sales.append({"price": price, "date": date, "title": title})
+        image = _extract_image(blk)
+        sales.append({"price": price, "date": date, "title": title, "image": image})
         if len(sales) >= max_results:
             break
     return sales
+
+
+def _extract_image(blk: str) -> str | None:
+    """Pull thumbnail image URL from a listing block."""
+    # eBay puts thumb URLs in src or srcset; usually has /s-l225.jpg or /s-l500.jpg
+    m = re.search(r'<img[^>]+src="([^"]+/s-l\d+\.[a-z]+)"', blk)
+    if m:
+        return m.group(1)
+    m = re.search(r'<img[^>]+data-src="([^"]+/s-l\d+\.[a-z]+)"', blk)
+    if m:
+        return m.group(1)
+    m = re.search(r'<img[^>]+src="(https://i\.ebayimg\.com/[^"]+)"', blk)
+    return m.group(1) if m else None
 
 
 def _extract_title(blk: str) -> str:
