@@ -5,3 +5,4 @@ inventory.json
 sales.json
 live_prices.json
 .github_workflows_refresh.yml
+trade_journal.json

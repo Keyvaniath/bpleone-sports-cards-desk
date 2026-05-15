@@ -153,7 +153,7 @@ with st.sidebar:
         "View",
         ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "🌈 Parallels",
          "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "📅 Catalysts", "💼 Inventory",
-         "🃏 Card Detail", "ℹ️ Methodology"],
+         "📓 Journal", "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
@@ -976,6 +976,118 @@ def page_sizer():
                     unsafe_allow_html=True)
 
 
+def page_journal():
+    st.markdown("## Trade Journal")
+    st.caption("Append-only buy/sell log with notes. Use to track thesis vs outcome.")
+
+    journal_file = Path("trade_journal.json")
+    entries = []
+    if journal_file.exists():
+        try:
+            entries = json.loads(journal_file.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+
+    with st.form("trade_entry"):
+        st.markdown("##### New Entry")
+        cols = st.columns([1, 2, 1, 1])
+        with cols[0]:
+            action = st.selectbox("Action", ["BUY", "SELL"])
+        with cols[1]:
+            card_pick = st.selectbox(
+                "Card",
+                options=[c[COL["id"]] for c in CARDS],
+                format_func=lambda cid: f"{cid} · {next(c[COL['player']] for c in CARDS if c[COL['id']]==cid)} · {next(c[COL['grade']] for c in CARDS if c[COL['id']]==cid)}",
+            )
+        with cols[2]:
+            qty = st.number_input("Qty", min_value=1, value=1, step=1)
+        with cols[3]:
+            price = st.number_input("Price each ($)", min_value=0.0, value=0.0, step=10.0)
+        cols2 = st.columns([2, 3])
+        with cols2[0]:
+            entry_date = st.date_input("Date", value=datetime.today())
+        with cols2[1]:
+            notes = st.text_input("Notes / thesis", placeholder="e.g. 'Buying after Skenes Cy Young odds shortened'")
+        submit = st.form_submit_button("Add entry")
+        if submit and price > 0:
+            entries.append({
+                "id": f"T{len(entries)+1:04d}",
+                "date": entry_date.isoformat(),
+                "action": action,
+                "card_id": card_pick,
+                "qty": int(qty),
+                "price": float(price),
+                "total": float(price) * int(qty),
+                "notes": notes,
+                "logged_at": datetime.utcnow().isoformat() + "Z",
+            })
+            journal_file.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+            st.success(f"Logged {action} {qty}× {card_pick} @ ${price:,.2f}")
+            st.rerun()
+
+    if not entries:
+        st.info("No entries yet — log your first buy or sell above.")
+        return
+
+    # Stats
+    buys = [e for e in entries if e["action"] == "BUY"]
+    sells = [e for e in entries if e["action"] == "SELL"]
+    total_bought = sum(e["total"] for e in buys)
+    total_sold = sum(e["total"] for e in sells)
+    realized = total_sold - sum(
+        # Match sell qty back to the average buy price for that card
+        e["qty"] * (sum(b["total"] for b in buys if b["card_id"] == e["card_id"]) /
+                    max(1, sum(b["qty"] for b in buys if b["card_id"] == e["card_id"])))
+        for e in sells
+    )
+
+    cols = st.columns(4)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Total Entries</div>"
+                    f"<div class='value'>{len(entries)}</div></div>", unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Bought</div>"
+                    f"<div class='value'>${total_bought:,.0f}</div>"
+                    f"<div class='sub'>{len(buys)} buys</div></div>", unsafe_allow_html=True)
+    with cols[2]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Sold</div>"
+                    f"<div class='value'>${total_sold:,.0f}</div>"
+                    f"<div class='sub'>{len(sells)} sells</div></div>", unsafe_allow_html=True)
+    with cols[3]:
+        color = GREEN if realized >= 0 else RED
+        st.markdown(f"<div class='stat-card'><div class='label'>Realized P&L</div>"
+                    f"<div class='value' style='color:{color}'>${realized:+,.0f}</div></div>",
+                    unsafe_allow_html=True)
+
+    st.markdown("##### Entries")
+    rows = []
+    for e in reversed(entries):
+        card = next((c for c in CARDS if c[COL["id"]] == e["card_id"]), None)
+        player = card[COL["player"]] if card else "?"
+        rows.append({
+            "ID": e["id"],
+            "Date": e["date"],
+            "Action": e["action"],
+            "Card": f"{e['card_id']} · {player}",
+            "Qty": e["qty"],
+            "Price": e["price"],
+            "Total": e["total"],
+            "Notes": e["notes"],
+        })
+    df = pd.DataFrame(rows)
+    styled = df.style.format({"Price": "${:,.2f}", "Total": "${:,.0f}"})
+    styled = styled.map(
+        lambda v: f"background-color: {GREEN if v=='BUY' else RED}; color: #0a0e1a; font-weight: 700",
+        subset=["Action"],
+    )
+    st.dataframe(styled, use_container_width=True, hide_index=True)
+
+    csv = df.to_csv(index=False).encode("utf-8")
+    st.download_button("⬇ Export journal CSV", data=csv,
+                       file_name=f"sports_cards_journal_{datetime.now().strftime('%Y%m%d')}.csv",
+                       mime="text/csv")
+
+
 def page_catalysts():
     st.markdown("## Catalysts Calendar")
     st.caption("Known events that move sports card prices. Use to time entries and exits, "
@@ -1109,6 +1221,8 @@ elif view.startswith("🧮"):
     page_sizer()
 elif view.startswith("📅"):
     page_catalysts()
+elif view.startswith("📓"):
+    page_journal()
 elif view.startswith("💼"):
     page_inventory()
 elif view.startswith("🃏"):
