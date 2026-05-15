@@ -325,6 +325,15 @@ def refresh_all(output_path: str = "live_prices.json", limit: int | None = None)
         "prices": out,
     }, indent=2), encoding="utf-8")
     print(f"\nRefreshed {len(out)}/{count} cards. Failed: {fail}. Stats: {_STATS}")
+
+    # Append today's snapshot to price history for trendlines
+    try:
+        import price_history
+        n_hist = price_history.append_snapshot(output_path)
+        print(f"Appended {n_hist} rows to price_history.jsonl")
+    except Exception as e:
+        print(f"[price_history] append failed: {e}", file=sys.stderr)
+
     return out
 
 

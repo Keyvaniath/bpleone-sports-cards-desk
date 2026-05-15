@@ -18,6 +18,8 @@ import streamlit as st
 from cards_data import CARDS
 from quant_score import score_all, score_card
 from sealed_products import SEALED, SEALED_COLS, score_sealed
+from parallels import PARALLELS, PARALLEL_COLS, score_parallel
+import price_history
 
 # Column index map for CARDS tuples
 COL = {
@@ -148,7 +150,8 @@ with st.sidebar:
 
     view = st.radio(
         "View",
-        ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "📦 Sealed", "💼 Inventory", "🃏 Card Detail", "ℹ️ Methodology"],
+        ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "🌈 Parallels",
+         "📦 Sealed", "⚖️ Compare", "🧮 Sizer", "💼 Inventory", "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
@@ -540,6 +543,15 @@ def page_card_detail():
     if d.get("psa_url"):
         st.markdown(f"**PSA pop report:** [{d['psa_url']}]({d['psa_url']})")
 
+    # Price history chart
+    history = price_history.load_history(card_pick)
+    if len(history) >= 2:
+        st.markdown("##### Price History")
+        hist_df = pd.DataFrame(history)
+        hist_df["date"] = pd.to_datetime(hist_df["date"])
+        hist_df = hist_df.set_index("date")
+        st.line_chart(hist_df["median"], height=240)
+
     sales = live.get("last_sales") or []
     if sales:
         st.markdown("##### Recent eBay Sales")
@@ -648,6 +660,241 @@ def page_sealed():
     st.dataframe(styled, use_container_width=True, hide_index=True, height=500)
 
 
+def page_parallels():
+    st.markdown("## Color / Refractor Parallels")
+    st.caption("Beyond base — the parallel ladder where most of the upside lives. "
+               "Silver → Hyper → Color → Numbered → Gold /10 → 1/1. "
+               "Each parallel is scored independently (momentum + value + scarcity from print run).")
+
+    rows = []
+    for p in PARALLELS:
+        scored = score_parallel(p, live_prices.get(p[0], {}).get("median") if live_prices else None)
+        base_card = next((c for c in CARDS if c[0] == p[1]), None)
+        base_player = base_card[COL["player"]] if base_card else "?"
+        rows.append({
+            "ID": p[PARALLEL_COLS["id"]],
+            "Base Card": f"{p[PARALLEL_COLS['base_id']]} · {base_player}",
+            "Sport": p[PARALLEL_COLS["sport"]],
+            "Parallel": p[PARALLEL_COLS["parallel_name"]],
+            "Print Run": p[PARALLEL_COLS["print_run"]],
+            "Grade": p[PARALLEL_COLS["grade"]],
+            "Anchor $": p[PARALLEL_COLS["price"]],
+            "30d %": round(p[PARALLEL_COLS["trend30d"]] * 100, 1),
+            "Buy <": p[PARALLEL_COLS["t_buy"]],
+            "Sell >": p[PARALLEL_COLS["t_sell"]],
+            "Pop": p[PARALLEL_COLS["pop"]],
+            "Score": scored["composite"],
+            "Verdict": scored["verdict"],
+        })
+    df = pd.DataFrame(rows)
+
+    fcols = st.columns(3)
+    with fcols[0]:
+        sport_pf = st.multiselect(
+            "Sport",
+            options=sorted(df["Sport"].unique()),
+            default=sorted(df["Sport"].unique()),
+            key="par_sport",
+        )
+    with fcols[1]:
+        parallel_pf = st.multiselect(
+            "Parallel type",
+            options=sorted(df["Parallel"].unique()),
+            default=sorted(df["Parallel"].unique()),
+            key="par_parallel",
+        )
+    with fcols[2]:
+        verdict_pf = st.multiselect(
+            "Verdict",
+            options=["STRONG BUY", "BUY", "HOLD", "TRIM", "SELL"],
+            default=["STRONG BUY", "BUY", "HOLD"],
+            key="par_verdict",
+        )
+
+    df = df[df["Sport"].isin(sport_pf) & df["Parallel"].isin(parallel_pf) & df["Verdict"].isin(verdict_pf)]
+    df = df.sort_values("Score", ascending=False)
+    if df.empty:
+        st.info("No parallels match these filters.")
+        return
+
+    cols = st.columns(3)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Parallels tracked</div>"
+                    f"<div class='value'>{len(df)}</div></div>", unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Notional</div>"
+                    f"<div class='value'>${df['Anchor $'].sum():,.0f}</div></div>", unsafe_allow_html=True)
+    with cols[2]:
+        n_buy = (df["Verdict"].isin(["STRONG BUY", "BUY"])).sum()
+        st.markdown(f"<div class='stat-card'><div class='label'>BUYs</div>"
+                    f"<div class='value' style='color:{GREEN}'>{n_buy}</div></div>", unsafe_allow_html=True)
+
+    styled = df.style.format({
+        "Anchor $": "${:,.0f}",
+        "Buy <": "${:,.0f}",
+        "Sell >": "${:,.0f}",
+        "30d %": "{:+.1f}%",
+        "Score": "{:.1f}",
+    })
+    styled = styled.map(
+        lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
+        subset=["Verdict"],
+    )
+    st.dataframe(styled, use_container_width=True, hide_index=True, height=550)
+
+
+def page_compare():
+    st.markdown("## Compare Cards Head-to-Head")
+    st.caption("Pick two cards. See which has the better composite, where it lives in its buy/sell band, "
+               "and how their sub-scores stack up.")
+
+    options = {c[COL["id"]]: f"{c[COL['id']]}  ·  {c[COL['player']]} — {c[COL['set_year']]} {c[COL['grade']]}" for c in CARDS}
+    cols = st.columns(2)
+    with cols[0]:
+        a_id = st.selectbox("Card A", options=list(options.keys()),
+                            format_func=lambda k: options[k], key="cmp_a")
+    with cols[1]:
+        b_id = st.selectbox("Card B", options=list(options.keys()),
+                            format_func=lambda k: options[k], index=1, key="cmp_b")
+
+    if a_id == b_id:
+        st.warning("Pick two different cards.")
+        return
+
+    a_card = next(c for c in CARDS if c[COL["id"]] == a_id)
+    b_card = next(c for c in CARDS if c[COL["id"]] == b_id)
+    a_score = scores_by_id.get(a_id)
+    b_score = scores_by_id.get(b_id)
+
+    def card_block(card, score, color: str):
+        d = card_dict(card)
+        return (
+            f"<div class='stat-card' style='border-left:4px solid {color}'>"
+            f"<div class='label'>{d['sport']} · {d['set_year']}</div>"
+            f"<div class='value' style='font-size:20px'>{d['player']}</div>"
+            f"<div class='sub'>#{d['card_num']} · {d['grade']} · T{d['tier']}</div>"
+            f"<div style='display:flex;justify-content:space-between;margin-top:14px;'>"
+            f"<span style='color:{TEXT_DIM}'>Anchor</span><strong>${d['price']:,.0f}</strong></div>"
+            f"<div style='display:flex;justify-content:space-between;'>"
+            f"<span style='color:{TEXT_DIM}'>Live</span><strong>{'${:,.0f}'.format(score.live_price) if score and score.live_price else '—'}</strong></div>"
+            f"<div style='display:flex;justify-content:space-between;'>"
+            f"<span style='color:{TEXT_DIM}'>Buy/Sell</span><strong>${d['t_buy']:,.0f} / ${d['t_sell']:,.0f}</strong></div>"
+            f"<div style='display:flex;justify-content:space-between;'>"
+            f"<span style='color:{TEXT_DIM}'>PSA Pop</span><strong>{d['pop']}</strong></div>"
+            f"<div style='display:flex;justify-content:space-between;margin-top:10px;border-top:1px solid {BORDER};padding-top:10px'>"
+            f"<span style='color:{TEXT_DIM}'>COMPOSITE</span>"
+            f"<strong style='color:{VERDICT_COLOR.get(score.verdict if score else 'HOLD', TEXT_DIM)};font-size:18px'>"
+            f"{score.composite:.1f} {score.verdict}</strong></div>"
+            f"<div style='color:{TEXT_DIM};margin-top:10px;font-size:13px'>{d['notes']}</div>"
+            f"</div>"
+        )
+
+    cols = st.columns(2)
+    with cols[0]:
+        st.markdown(card_block(a_card, a_score, "#60a5fa"), unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(card_block(b_card, b_score, "#f5c842"), unsafe_allow_html=True)
+
+    # Sub-score bars
+    if a_score and b_score:
+        st.markdown("##### Sub-score breakdown")
+        sub = pd.DataFrame({
+            "Metric": ["Momentum", "Value", "Scarcity", "Liquidity", "Composite"],
+            f"{a_card[COL['player']]} (A)": [a_score.momentum, a_score.value, a_score.scarcity, a_score.liquidity, a_score.composite],
+            f"{b_card[COL['player']]} (B)": [b_score.momentum, b_score.value, b_score.scarcity, b_score.liquidity, b_score.composite],
+        }).set_index("Metric")
+        st.bar_chart(sub, height=320)
+
+        winner = a_card[COL["player"]] if a_score.composite > b_score.composite else b_card[COL["player"]]
+        diff = abs(a_score.composite - b_score.composite)
+        st.success(f"📊 **{winner}** wins on composite by {diff:.1f} points.")
+
+
+def page_sizer():
+    st.markdown("## Position Sizer")
+    st.caption("Risk-managed allocation: given your bankroll and per-trade risk tolerance, "
+               "the max position size per card. Kelly-lite formula — 1/2 Kelly given a probabilistic edge.")
+
+    cols = st.columns(3)
+    with cols[0]:
+        bankroll = st.number_input("Total bankroll ($)", min_value=100.0, value=10000.0, step=500.0)
+    with cols[1]:
+        risk_pct = st.slider("Max risk per position (%)", min_value=1.0, max_value=15.0, value=5.0, step=0.5)
+    with cols[2]:
+        edge_assumed = st.slider("Assumed edge (%)", min_value=5.0, max_value=40.0, value=15.0, step=1.0,
+                                 help="Your conviction that the card is undervalued. Higher = larger position.")
+
+    max_per_position = bankroll * risk_pct / 100
+    half_kelly_pct = 0.5 * (edge_assumed / 100) / max(0.01, 1.0)  # simplification
+    kelly_size = bankroll * half_kelly_pct
+
+    cols = st.columns(3)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Bankroll</div>"
+                    f"<div class='value'>${bankroll:,.0f}</div></div>", unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Max per position</div>"
+                    f"<div class='value' style='color:{GOLD}'>${max_per_position:,.0f}</div>"
+                    f"<div class='sub'>{risk_pct:.1f}% of bankroll</div></div>", unsafe_allow_html=True)
+    with cols[2]:
+        st.markdown(f"<div class='stat-card'><div class='label'>1/2 Kelly target</div>"
+                    f"<div class='value' style='color:{GREEN}'>${kelly_size:,.0f}</div>"
+                    f"<div class='sub'>{half_kelly_pct*100:.1f}% of bankroll</div></div>", unsafe_allow_html=True)
+
+    st.markdown("##### Suggested entries — current BUY signals")
+    buys = [s for s in scores_list if s.verdict in ("STRONG BUY", "BUY")]
+    if not buys:
+        st.info("No active BUY signals.")
+        return
+
+    rows = []
+    for s in buys:
+        card = next(c for c in CARDS if c[COL["id"]] == s.card_id)
+        d = card_dict(card)
+        unit_price = s.live_price or d["price"]
+        cap = min(max_per_position, kelly_size)
+        max_qty = int(cap // unit_price) if unit_price > 0 else 0
+        if max_qty < 1:
+            max_qty = 1 if unit_price <= bankroll else 0
+        suggested_dollars = max_qty * unit_price
+        rows.append({
+            "ID": s.card_id,
+            "Player": d["player"],
+            "Grade": d["grade"],
+            "Verdict": s.verdict,
+            "Score": s.composite,
+            "Unit $": unit_price,
+            "Max Qty": max_qty,
+            "Suggested $": suggested_dollars,
+            "% of bankroll": (suggested_dollars / bankroll * 100) if bankroll else 0,
+        })
+    df = pd.DataFrame(rows).sort_values("Score", ascending=False)
+    styled = df.style.format({
+        "Unit $": "${:,.0f}",
+        "Suggested $": "${:,.0f}",
+        "Score": "{:.1f}",
+        "% of bankroll": "{:.1f}%",
+    })
+    styled = styled.map(
+        lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
+        subset=["Verdict"],
+    )
+    st.dataframe(styled, use_container_width=True, hide_index=True)
+
+    total_deployed = df["Suggested $"].sum()
+    cash_remaining = bankroll - total_deployed
+    cols = st.columns(2)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Total deployable</div>"
+                    f"<div class='value'>${total_deployed:,.0f}</div>"
+                    f"<div class='sub'>{total_deployed/bankroll*100:.0f}% of bankroll</div></div>",
+                    unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Cash remaining</div>"
+                    f"<div class='value' style='color:{TEXT_DIM}'>${cash_remaining:,.0f}</div></div>",
+                    unsafe_allow_html=True)
+
+
 def page_methodology():
     st.markdown("## Methodology")
     st.markdown("""
@@ -707,8 +954,14 @@ elif view.startswith("🎯"):
     page_buy_signals()
 elif view.startswith("📊"):
     page_by_sport()
+elif view.startswith("🌈"):
+    page_parallels()
 elif view.startswith("📦"):
     page_sealed()
+elif view.startswith("⚖️"):
+    page_compare()
+elif view.startswith("🧮"):
+    page_sizer()
 elif view.startswith("💼"):
     page_inventory()
 elif view.startswith("🃏"):
