@@ -1,52 +1,57 @@
 {
-  "generated_at": "2026-05-15T07:48:17Z",
-  "card_count": 143,
+  "generated_at": "2026-05-15T08:25:10Z",
+  "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
   "vintage_grade_count": 36,
   "catalyst_count": 14,
-  "total_book_value": 1435880,
+  "total_book_value": 1454270,
   "verdict_counts": {
-    "BUY": 20,
-    "HOLD": 91,
-    "TRIM": 32
+    "BUY": 23,
+    "HOLD": 99,
+    "TRIM": 36
   },
   "by_sport": {
     "Baseball": {
-      "count": 41,
-      "book_value": 329415,
+      "count": 45,
+      "book_value": 340525,
       "buys": 4,
-      "avg_score": 56.4,
-      "trend30d_avg": 9.2
+      "avg_score": 56.6,
+      "trend30d_avg": 9.1
     },
     "Football": {
-      "count": 43,
-      "book_value": 221570,
-      "buys": 5,
+      "count": 46,
+      "book_value": 221850,
+      "buys": 6,
       "avg_score": 57.1,
-      "trend30d_avg": 13.1
+      "trend30d_avg": 13.6
     },
     "Basketball": {
-      "count": 39,
-      "book_value": 361815,
+      "count": 44,
+      "book_value": 365885,
       "buys": 7,
       "avg_score": 57.3,
-      "trend30d_avg": 13.0
+      "trend30d_avg": 12.2
     },
     "Other": {
-      "count": 20,
-      "book_value": 523080,
-      "buys": 4,
-      "avg_score": 63.9,
-      "trend30d_avg": 14.8
+      "count": 23,
+      "book_value": 526010,
+      "buys": 6,
+      "avg_score": 64.8,
+      "trend30d_avg": 17.2
     }
   },
   "by_tier": {
-    "T1": 61,
-    "T2": 68,
-    "T3": 14
+    "T1": 66,
+    "T2": 76,
+    "T3": 16
   },
   "top_gainers_30d": [
+    {
+      "id": "X023",
+      "player": "Lamine Yamal",
+      "trend30d": 65.0
+    },
     {
       "id": "F023",
       "player": "Bryce Underwood",
@@ -66,11 +71,6 @@
       "id": "F043",
       "player": "Julian Sayin",
       "trend30d": 55.0
-    },
-    {
-      "id": "B022",
-      "player": "Konnor Griffin",
-      "trend30d": 50.0
     }
   ],
   "top_losers_30d": [
