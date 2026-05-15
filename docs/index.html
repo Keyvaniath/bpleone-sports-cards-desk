@@ -4,7 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="bpleone Sports Cards Desk — PSA-graded NBA/NFL/MLB trading framework. Composite quant scoring, live eBay sold-comps, Bowman 1st Chrome prospects, NIL autos, vintage HOFers.">
+<meta name="keywords" content="sports cards, PSA, BGS, SGC, Topps Chrome, Panini Prizm, Bowman Chrome, National Treasures, NFL rookie cards, NBA cards, MLB cards, card investing, sports card EV">
+<meta name="author" content="Brandon P. Leone">
+<meta property="og:title" content="Sports Cards Desk · bpleone.com">
+<meta property="og:description" content="98-card watchlist · 36 color/refractor parallels · 17 sealed boxes · 36 vintage grade ladders · 14 catalysts. Composite quant scoring on PSA-graded cards.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bpleone.com/sports-cards/">
+<meta property="og:site_name" content="bpleone.com">
+<meta property="og:image" content="https://bpleone.com/og.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bpleone.com/og.svg">
+<meta name="twitter:title" content="Sports Cards Desk · bpleone.com">
+<meta name="twitter:description" content="PSA-graded sports cards. 98-card watchlist with composite quant scoring. Caleb Williams, Wemby, Skenes, '52 Mantle.">
+<link rel="canonical" href="https://bpleone.com/sports-cards/">
 <title>Sports Cards Desk — bpleone.com</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Sports Cards Desk",
+  "url": "https://bpleone.com/sports-cards/",
+  "description": "PSA-graded sports cards trading framework with composite quant scoring. 98-card watchlist across baseball, football, basketball.",
+  "author": {"@type": "Person", "name": "Brandon P. Leone", "url": "https://bpleone.com"},
+  "isPartOf": {"@type": "WebSite", "name": "bpleone.com", "url": "https://bpleone.com"},
+  "about": [
+    {"@type": "Thing", "name": "Sports card investing"},
+    {"@type": "Thing", "name": "PSA grading"},
+    {"@type": "Thing", "name": "Topps Chrome"},
+    {"@type": "Thing", "name": "Panini Prizm"},
+    {"@type": "Thing", "name": "Bowman Chrome prospects"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -214,6 +245,63 @@
   th { color: var(--text-dim); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
   td.num { font-family: 'JetBrains Mono', monospace; text-align: right; }
 
+  .signal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .signal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.15s;
+  }
+  .signal-card:hover { border-color: var(--gold); }
+  .signal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .signal-verdict {
+    color: #0a0e1a;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .signal-score {
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .signal-player {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .signal-meta {
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .signal-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-dim);
+    border-top: 1px dashed var(--border);
+    padding-top: 8px;
+    gap: 6px;
+  }
+  .signal-stats strong { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
   footer {
     border-top: 1px solid var(--border);
     padding: 32px 0;
@@ -239,10 +327,10 @@
     <div class="badge-live">● Live</div>
     <div class="hero-eyebrow">Trading Desk · PSA-graded sports cards</div>
     <h1>Apply the Pokémon framework to <span class="accent">PSA-graded sports cards</span>.</h1>
-    <p class="lede">98 cards across baseball, football, basketball, hockey, soccer, F1, UFC. 36 color/refractor parallels. 17 sealed-product boxes. 36 vintage HOFer grade ladders. Composite quant scoring (momentum + value + scarcity + liquidity). Live eBay sold-comp refresh. STRONG BUY / BUY / HOLD / TRIM / SELL verdicts. Inventory P&amp;L. Schedule D / Form 8949 tax helper.</p>
+    <p class="lede">114 cards across baseball, football, basketball, hockey, soccer, F1, UFC, WNBA. 36 color/refractor parallels. 17 sealed-product boxes. 36 vintage HOFer grade ladders. Composite quant scoring (momentum + value + scarcity + liquidity). Live eBay sold-comp refresh. STRONG BUY / BUY / HOLD / TRIM / SELL verdicts. Inventory P&amp;L. Schedule D / Form 8949 tax helper.</p>
 
     <div class="stat-strip">
-      <div class="stat"><div class="num">98</div><div class="lbl">cards · watchlist</div></div>
+      <div class="stat"><div class="num">114</div><div class="lbl">cards · watchlist</div></div>
       <div class="stat"><div class="num">36</div><div class="lbl">color parallels</div></div>
       <div class="stat"><div class="num">17</div><div class="lbl">sealed products</div></div>
       <div class="stat"><div class="num">36</div><div class="lbl">vintage grades</div></div>
@@ -252,6 +340,119 @@
 </section>
 
 <div class="container">
+
+  <section class="block">
+    <h2>Today's top BUY signals <span id="sc-live-dot" style="display:inline-block; width:8px; height:8px; background:#4ade80; border-radius:50%; margin-left:8px; animation:pulse 2s infinite;"></span></h2>
+    <p style="color:var(--text-dim); margin-bottom:8px; font-size:14px;">Composite ≥ 70 from the live watchlist. Sorted by score. <span id="sc-meta">Loading...</span></p>
+    <style>@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } }</style>
+    <div class="signal-grid" id="sc-signal-grid">
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">76.2</span>
+        </div>
+        <div class="signal-player">Bryce Underwood</div>
+        <div class="signal-meta">Football · 2025 Panini Prizm Draft Picks · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$95</strong></span>
+          <span style="color:#22c55e">30d <strong>+60%</strong></span>
+          <span>Pop <strong>300</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">75.5</span>
+        </div>
+        <div class="signal-player">Konnor Griffin</div>
+        <div class="signal-meta">Baseball · 2024 Bowman Chrome Prospects · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$55</strong></span>
+          <span style="color:#22c55e">30d <strong>+50%</strong></span>
+          <span>Pop <strong>350</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">72.2</span>
+        </div>
+        <div class="signal-player">Travis Bazzana</div>
+        <div class="signal-meta">Baseball · 2024 Bowman Chrome Prospects · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$95</strong></span>
+          <span style="color:#22c55e">30d <strong>+40%</strong></span>
+          <span>Pop <strong>500</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">71.5</span>
+        </div>
+        <div class="signal-player">Malik Nabers</div>
+        <div class="signal-meta">Football · 2024 Panini Prizm · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$110</strong></span>
+          <span style="color:#22c55e">30d <strong>+30%</strong></span>
+          <span>Pop <strong>1,200</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">71.5</span>
+        </div>
+        <div class="signal-player">Travis Hunter</div>
+        <div class="signal-meta">Football · 2023 Panini Prizm Draft Picks · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$110</strong></span>
+          <span style="color:#22c55e">30d <strong>+30%</strong></span>
+          <span>Pop <strong>1,100</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">71.2</span>
+        </div>
+        <div class="signal-player">Brock Bowers</div>
+        <div class="signal-meta">Football · 2024 Panini Prizm · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$130</strong></span>
+          <span style="color:#22c55e">30d <strong>+40%</strong></span>
+          <span>Pop <strong>1,100</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">71.2</span>
+        </div>
+        <div class="signal-player">Cooper Flagg</div>
+        <div class="signal-meta">Basketball · 2024 Bowman University Chrome · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$480</strong></span>
+          <span style="color:#22c55e">30d <strong>+60%</strong></span>
+          <span>Pop <strong>800</strong></span>
+        </div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:#86efac;">BUY</span>
+          <span class="signal-score">71.1</span>
+        </div>
+        <div class="signal-player">Roman Anthony</div>
+        <div class="signal-meta">Baseball · 2023 Bowman Chrome Prospects · PSA 10</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>$90</strong></span>
+          <span style="color:#22c55e">30d <strong>+25%</strong></span>
+          <span>Pop <strong>1,100</strong></span>
+        </div>
+      </div>
+    </div>
+    <p style="color:var(--text-dim); margin-top:14px; font-size:12px; font-style:italic;">Pre-live-price baseline. Once eBay refresh runs from a non-data-center IP, scores adjust based on real sold-comp medians vs anchor.</p>
+  </section>
 
   <div class="cta-row">
     <div class="pitch">
@@ -415,6 +616,27 @@
     </div>
   </div>
 
+  <section class="block">
+    <h2>Other desks</h2>
+    <div class="features-grid">
+      <a class="feature" href="https://pokemon.bpleone.com" target="_blank" rel="noopener" style="text-decoration:none; color:inherit; display:block;">
+        <div class="icon">🃏</div>
+        <h3>Pokémon TCG</h3>
+        <p>The original. 20,000+ cards searchable, 774 quant-scored, live TCGPlayer prices, 5 budget brackets.</p>
+      </a>
+      <a class="feature" href="/sports/" rel="noopener" style="text-decoration:none; color:inherit; display:block;">
+        <div class="icon">🏟️</div>
+        <h3>Sports Hub</h3>
+        <p>Lakers, Dodgers, Rams, USC. Live scores + schedule + injuries + fantasy in one place.</p>
+      </a>
+      <a class="feature" href="https://betting.bpleone.com" target="_blank" rel="noopener" style="text-decoration:none; color:inherit; display:block;">
+        <div class="icon">🎲</div>
+        <h3>Sports Betting / DFS</h3>
+        <p>Lines, models, ML lab, parlays, DFS lineups. Bankroll discipline built in.</p>
+      </a>
+    </div>
+  </section>
+
 </div>
 
 <footer>
@@ -424,5 +646,90 @@
   </div>
 </footer>
 
+<script>
+// Live BUY signals fetcher — pulls top signals from the desk repo's signals.json
+// (refreshed weekly off the eBay refresh GitHub Action). Falls back to static
+// content if the fetch fails.
+(function() {
+  const SIGNALS_URL = "https://raw.githubusercontent.com/Keyvaniath/bpleone-sports-cards-desk/main/docs/signals.json";
+
+  function trendColor(pct) {
+    return pct >= 0 ? "#22c55e" : "#fb923c";
+  }
+  function verdictBg(v) {
+    return v === "STRONG BUY" ? "#22c55e" : (v === "BUY" ? "#86efac" : "#8b94a8");
+  }
+  function fmt$(n) {
+    if (n == null) return "—";
+    return "$" + n.toLocaleString();
+  }
+  function fmtPct(n) {
+    if (n == null) return "—";
+    const s = n >= 0 ? "+" : "";
+    return s + n.toFixed(0) + "%";
+  }
+  function timeAgo(iso) {
+    try {
+      const d = new Date(iso);
+      const min = Math.floor((Date.now() - d.getTime()) / 60000);
+      if (min < 60) return min + "m ago";
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return hr + "h ago";
+      return Math.floor(hr / 24) + "d ago";
+    } catch (e) { return iso; }
+  }
+
+  async function refresh() {
+    try {
+      const r = await fetch(SIGNALS_URL + "?cb=" + Date.now());
+      if (!r.ok) throw new Error("fetch failed " + r.status);
+      const data = await r.json();
+      renderCards(data);
+      renderMeta(data);
+    } catch (e) {
+      const meta = document.getElementById("sc-meta");
+      if (meta) meta.textContent = "Showing baseline. Live refresh pending eBay GitHub Action.";
+    }
+  }
+
+  function renderMeta(d) {
+    const meta = document.getElementById("sc-meta");
+    if (!meta) return;
+    const vc = d.verdict_counts || {};
+    meta.innerHTML = "Refreshed " + timeAgo(d.generated_at) +
+      " · " + d.card_count + " cards · " +
+      (vc["STRONG BUY"]||0) + " strong, " + (vc["BUY"]||0) + " buy, " +
+      (vc["HOLD"]||0) + " hold, " + (vc["TRIM"]||0) + " trim, " + (vc["SELL"]||0) + " sell";
+  }
+
+  function renderCards(d) {
+    const grid = document.getElementById("sc-signal-grid");
+    if (!grid) return;
+    const buys = d.top_buys || [];
+    if (!buys.length) {
+      grid.innerHTML = '<p style="color:#8b94a8; padding:18px; grid-column:1/-1;">No active BUY signals right now.</p>';
+      return;
+    }
+    grid.innerHTML = buys.map(s => `
+      <div class="signal-card">
+        <div class="signal-head">
+          <span class="signal-verdict" style="background:${verdictBg(s.verdict)};">${s.verdict}</span>
+          <span class="signal-score">${(s.composite||0).toFixed(1)}</span>
+        </div>
+        <div class="signal-player">${s.player}</div>
+        <div class="signal-meta">${s.sport} · ${s.set_year} · ${s.grade}</div>
+        <div class="signal-stats">
+          <span>Anchor <strong>${fmt$(s.anchor)}</strong></span>
+          <span style="color:${trendColor(s.trend30d)}">30d <strong>${fmtPct(s.trend30d)}</strong></span>
+          <span>Pop <strong>${s.pop?.toLocaleString() || '—'}</strong></span>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  refresh();
+  setInterval(refresh, 5 * 60 * 1000);
+})();
+</script>
 </body>
 </html>
