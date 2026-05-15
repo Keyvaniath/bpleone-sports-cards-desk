@@ -434,8 +434,48 @@ def page_inventory():
         except Exception:
             pass
 
-    st.markdown("#### Add / Update Position")
-    with st.form("add_position"):
+    # Tabs: single add vs bulk import
+    add_tab, bulk_tab = st.tabs(["Add one position", "Bulk import CSV"])
+
+    with bulk_tab:
+        st.caption("Paste CSV with columns: `card_id,qty,cost,buy_date`. Header row required.")
+        sample = "card_id,qty,cost,buy_date\nB001,1,280.00,2026-05-01\nF001,2,220.00,2026-04-15\n"
+        bulk_text = st.text_area("CSV data", value="", height=180, placeholder=sample, key="bulk_csv")
+        if st.button("Import"):
+            import csv as csv_mod
+            import io
+            errors = []
+            imported = 0
+            valid_ids = {c[COL["id"]] for c in CARDS}
+            try:
+                reader = csv_mod.DictReader(io.StringIO(bulk_text))
+                for r in reader:
+                    cid = (r.get("card_id") or "").strip()
+                    if cid not in valid_ids:
+                        errors.append(f"Unknown card_id: {cid}")
+                        continue
+                    try:
+                        qty = int(r.get("qty", 1))
+                        cost = float(r.get("cost", 0))
+                        buy_date = (r.get("buy_date") or datetime.today().isoformat()).strip()
+                    except ValueError as e:
+                        errors.append(f"{cid}: bad number — {e}")
+                        continue
+                    inv[cid] = {"qty": qty, "cost": cost, "buy_date": buy_date}
+                    imported += 1
+                if imported:
+                    inv_file.write_text(json.dumps(inv, indent=2), encoding="utf-8")
+                    st.success(f"Imported {imported} position(s).")
+                if errors:
+                    for e in errors[:5]:
+                        st.warning(e)
+                if imported:
+                    st.rerun()
+            except Exception as e:
+                st.error(f"Couldn't parse CSV: {e}")
+
+    add_tab.markdown("#### Add / Update Position")
+    with add_tab.form("add_position"):
         cols = st.columns([2, 1, 1, 1])
         with cols[0]:
             card_pick = st.selectbox(

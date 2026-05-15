@@ -142,6 +142,41 @@ PARALLELS = [
     ("P026", "K011", "Basketball", "Gold Refractor",        "/50",        "PSA 10",  5500,  0.55, 4200, 9500,  18,
      "2024 Bowman University Chrome Gold Refractor Cooper Flagg /50 PSA 10",
      "Gold /50 Bowman U. The bet of 2025."),
+
+    # ============================================================
+    # AUTOGRAPH TIER — National Treasures / Topps Dynasty / Bowman 1st Auto
+    # These are the apex parallels. RPAs (Rookie Patch Auto) are 1-of-99 or rarer.
+    # ============================================================
+    ("P027", "K001", "Basketball", "NT RPA",                 "/99",        "PSA 10", 78000, 0.05, 60000, 120000, 22,
+     "2023 Panini National Treasures Victor Wembanyama RPA Auto /99 PSA 10",
+     "Wemby NT RPA. The Spurs grail. /99 = scarce. Patch + auto on a single card."),
+    ("P028", "F001", "Football", "NT RPA",                   "/99",        "PSA 10", 45000, 0.10, 35000, 75000, 18,
+     "2024 Panini National Treasures Caleb Williams RPA Auto /99 PSA 10",
+     "Caleb NT RPA. Bears collector base + USC bonus. Apex card."),
+    ("P029", "F002", "Football", "NT RPA",                   "/99",        "PSA 10", 32000, 0.20, 25000, 55000, 15,
+     "2024 Panini National Treasures Jayden Daniels RPA Auto /99 PSA 10",
+     "OROY RPA. Commanders run-up boosts. Apex."),
+    ("P030", "F006", "Football", "NT RPA",                   "/99",        "PSA 10", 28000, 0.15, 22000, 48000, 12,
+     "2024 Panini National Treasures Marvin Harrison Jr RPA Auto /99 PSA 10",
+     "MHJ RPA. HOF dad emotional premium. Apex WR card of class."),
+    ("P031", "B001", "Baseball", "Topps Dynasty Auto",       "/10",        "PSA 10", 18000, 0.12, 14000, 32000,  8,
+     "2024 Topps Dynasty Paul Skenes Auto /10 PSA 10",
+     "Dynasty = MLB equivalent of NT. /10 print. Skenes apex."),
+    ("P032", "B017", "Baseball", "Bowman 1st Chrome Auto",   "unnumbered", "PSA 10",   650, 0.40,  480, 1150,  280,
+     "2023 Bowman Chrome Prospects Roman Anthony 1st Chrome Auto PSA 10",
+     "Bowman 1st Chrome Auto base. Top prospect auto market mover."),
+    ("P033", "B015", "Baseball", "Bowman 1st Chrome Auto",   "unnumbered", "PSA 10",   850, 0.30,  650, 1450,  220,
+     "2024 Bowman Chrome Prospects Walker Jenkins 1st Chrome Auto PSA 10",
+     "Twins #5-pick auto. Strong A-ball production tailwind."),
+    ("P034", "B020", "Baseball", "Bowman 1st Chrome Auto",   "/99",        "PSA 10",  1400, 0.50, 1050, 2400,   95,
+     "2024 Bowman Chrome Prospects Travis Bazzana 1st Chrome Auto /99 PSA 10",
+     "Bazzana #1 overall 2024 Auto /99. Card #BCP-1 collector premium."),
+    ("P035", "K011", "Basketball", "Bowman U Chrome Auto",   "unnumbered", "PSA 10",  1200, 0.60,  900, 2100,  240,
+     "2024 Bowman University Chrome Cooper Flagg Auto PSA 10",
+     "Bowman U Auto. Pre-NBA-draft moonshot. The 2025 chase."),
+    ("P036", "F016", "Football", "Bowman U Chrome Auto",     "unnumbered", "PSA 10",   850, 0.50,  650, 1500,  280,
+     "2023 Bowman University Chrome Arch Manning Auto PSA 10",
+     "Arch's only on-card auto until NFL. Dynasty premium."),
 ]
 
 PARALLEL_COLS = {
