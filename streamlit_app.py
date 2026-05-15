@@ -17,6 +17,7 @@ import streamlit as st
 
 from cards_data import CARDS
 from quant_score import score_all, score_card
+from sealed_products import SEALED, SEALED_COLS, score_sealed
 
 # Column index map for CARDS tuples
 COL = {
@@ -147,7 +148,7 @@ with st.sidebar:
 
     view = st.radio(
         "View",
-        ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "💼 Inventory", "🃏 Card Detail", "ℹ️ Methodology"],
+        ["🏠 Dashboard", "🔍 Watchlist", "🎯 BUY Signals", "📊 By Sport", "📦 Sealed", "💼 Inventory", "🃏 Card Detail", "ℹ️ Methodology"],
         index=0,
         label_visibility="collapsed",
     )
@@ -550,6 +551,103 @@ def page_card_detail():
         st.info("No live sales loaded for this card yet. Run `python live_prices.py` to refresh.")
 
 
+def page_sealed():
+    st.markdown("## Sealed Product")
+    st.caption("Boxes / cases — longer-duration sealed-product holds. Different scoring "
+               "than singles: trend + risk-adjusted upside (top-quartile rip EV vs floor).")
+
+    rows = []
+    for prod in SEALED:
+        scored = score_sealed(prod)
+        d = {k: prod[i] for k, i in SEALED_COLS.items()}
+        rows.append({
+            "ID": d["id"],
+            "Sport": d["sport"],
+            "Product": d["product"],
+            "Brand": d["brand"],
+            "Set / Year": d["set_year"],
+            "Config": d["config"],
+            "MSRP $": d["msrp"],
+            "Market $": d["market"],
+            "Apprec %": scored["appreciation_pct"],
+            "30d %": round(d["trend30d"] * 100, 1),
+            "EV Floor": d["ev_floor"],
+            "EV Top": d["ev_top"],
+            "Up %": scored["upside_pct"],
+            "Down %": scored["downside_pct"],
+            "R:R": scored["risk_reward"],
+            "Score": scored["composite"],
+            "Verdict": scored["verdict"],
+        })
+    df = pd.DataFrame(rows)
+
+    fcols = st.columns(3)
+    with fcols[0]:
+        sport_filter = st.multiselect(
+            "Sport",
+            options=sorted({p[SEALED_COLS["sport"]] for p in SEALED}),
+            default=sorted({p[SEALED_COLS["sport"]] for p in SEALED}),
+            key="sealed_sport",
+        )
+    with fcols[1]:
+        product_filter = st.multiselect(
+            "Product type",
+            options=sorted({p[SEALED_COLS["product"]] for p in SEALED}),
+            default=sorted({p[SEALED_COLS["product"]] for p in SEALED}),
+            key="sealed_product",
+        )
+    with fcols[2]:
+        verdict_filter = st.multiselect(
+            "Verdict",
+            options=["STRONG BUY", "BUY", "HOLD", "TRIM", "SELL"],
+            default=["STRONG BUY", "BUY", "HOLD"],
+            key="sealed_verdict",
+        )
+
+    df = df[df["Sport"].isin(sport_filter)
+            & df["Product"].isin(product_filter)
+            & df["Verdict"].isin(verdict_filter)]
+    if df.empty:
+        st.info("No sealed product matches these filters.")
+        return
+
+    df = df.sort_values("Score", ascending=False)
+    styled = df.style.format({
+        "MSRP $": "${:,.0f}",
+        "Market $": "${:,.0f}",
+        "EV Floor": "${:,.0f}",
+        "EV Top": "${:,.0f}",
+        "Apprec %": "{:+.1f}%",
+        "30d %": "{:+.1f}%",
+        "Up %": "{:+.1f}%",
+        "Down %": "{:.1f}%",
+        "R:R": "{:.2f}",
+        "Score": "{:.1f}",
+    })
+    if "Verdict" in df.columns:
+        styled = styled.map(
+            lambda v: f"background-color: {VERDICT_COLOR.get(v, '#232a3e')}; color: #0a0e1a; font-weight: 700",
+            subset=["Verdict"],
+        )
+
+    # Headline totals
+    cols = st.columns(3)
+    with cols[0]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Products tracked</div>"
+                    f"<div class='value'>{len(df)}</div></div>", unsafe_allow_html=True)
+    with cols[1]:
+        st.markdown(f"<div class='stat-card'><div class='label'>Market notional</div>"
+                    f"<div class='value'>${df['Market $'].sum():,.0f}</div></div>", unsafe_allow_html=True)
+    with cols[2]:
+        avg_apprec = df["Apprec %"].mean()
+        color = GREEN if avg_apprec >= 0 else RED
+        st.markdown(f"<div class='stat-card'><div class='label'>Avg appreciation vs MSRP</div>"
+                    f"<div class='value' style='color:{color}'>{avg_apprec:+.1f}%</div></div>",
+                    unsafe_allow_html=True)
+
+    st.dataframe(styled, use_container_width=True, hide_index=True, height=500)
+
+
 def page_methodology():
     st.markdown("## Methodology")
     st.markdown("""
@@ -609,6 +707,8 @@ elif view.startswith("🎯"):
     page_buy_signals()
 elif view.startswith("📊"):
     page_by_sport()
+elif view.startswith("📦"):
+    page_sealed()
 elif view.startswith("💼"):
     page_inventory()
 elif view.startswith("🃏"):
