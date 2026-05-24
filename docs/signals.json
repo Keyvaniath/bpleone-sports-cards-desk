@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-17T22:56:42Z",
+  "generated_at": "2026-05-24T23:01:03Z",
   "card_count": 158,
-  "live_count": 0,
+  "live_count": 5,
   "verdict_counts": {
     "STRONG BUY": 0,
-    "BUY": 23,
+    "BUY": 24,
     "HOLD": 99,
-    "TRIM": 36,
+    "TRIM": 35,
     "SELL": 0
   },
   "top_buys": [
@@ -123,6 +123,22 @@
       "ebay_query": "2024 Bowman Chrome Prospects Konnor Griffin BCP-44 PSA 10"
     },
     {
+      "id": "B001",
+      "player": "Paul Skenes",
+      "sport": "Baseball",
+      "set_year": "2024 Topps Chrome Update",
+      "grade": "PSA 10",
+      "anchor": 280,
+      "live": 175.0,
+      "trend30d": 12.0,
+      "t_buy": 200,
+      "t_sell": 450,
+      "pop": 1850,
+      "verdict": "BUY",
+      "composite": 74.8,
+      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
+    },
+    {
       "id": "K031",
       "player": "JuJu Watkins",
       "sport": "Basketball",
@@ -185,22 +201,6 @@
       "verdict": "BUY",
       "composite": 71.8,
       "ebay_query": "2025 Panini Prizm WNBA Paige Bueckers RC 1 PSA 10"
-    },
-    {
-      "id": "F046",
-      "player": "Travis Hunter",
-      "sport": "Football",
-      "set_year": "2024 Panini Prizm Draft Picks",
-      "grade": "PSA 10",
-      "anchor": 130,
-      "live": null,
-      "trend30d": 45.0,
-      "t_buy": 95,
-      "t_sell": 240,
-      "pop": 900,
-      "verdict": "BUY",
-      "composite": 71.8,
-      "ebay_query": "2024 Panini Prizm Draft Picks Travis Hunter Colorado PSA 10"
     }
   ]
 }
