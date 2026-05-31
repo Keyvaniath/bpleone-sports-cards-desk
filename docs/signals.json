@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-24T23:01:03Z",
+  "generated_at": "2026-05-31T23:02:54Z",
   "card_count": 158,
-  "live_count": 5,
+  "live_count": 3,
   "verdict_counts": {
     "STRONG BUY": 0,
     "BUY": 24,
@@ -123,22 +123,6 @@
       "ebay_query": "2024 Bowman Chrome Prospects Konnor Griffin BCP-44 PSA 10"
     },
     {
-      "id": "B001",
-      "player": "Paul Skenes",
-      "sport": "Baseball",
-      "set_year": "2024 Topps Chrome Update",
-      "grade": "PSA 10",
-      "anchor": 280,
-      "live": 175.0,
-      "trend30d": 12.0,
-      "t_buy": 200,
-      "t_sell": 450,
-      "pop": 1850,
-      "verdict": "BUY",
-      "composite": 74.8,
-      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
-    },
-    {
       "id": "K031",
       "player": "JuJu Watkins",
       "sport": "Basketball",
@@ -153,6 +137,22 @@
       "verdict": "BUY",
       "composite": 72.5,
       "ebay_query": "2025 Bowman University Chrome JuJu Watkins PSA 10"
+    },
+    {
+      "id": "B001",
+      "player": "Paul Skenes",
+      "sport": "Baseball",
+      "set_year": "2024 Topps Chrome Update",
+      "grade": "PSA 10",
+      "anchor": 280,
+      "live": 178.75,
+      "trend30d": 12.0,
+      "t_buy": 200,
+      "t_sell": 450,
+      "pop": 1850,
+      "verdict": "BUY",
+      "composite": 72.2,
+      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
     },
     {
       "id": "B020",

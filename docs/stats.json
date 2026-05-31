@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-24T23:01:03Z",
+  "generated_at": "2026-05-31T23:02:54Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -16,7 +16,7 @@
       "count": 45,
       "book_value": 340525,
       "buys": 5,
-      "avg_score": 57.2,
+      "avg_score": 57.5,
       "trend30d_avg": 9.1
     },
     "Football": {
@@ -102,16 +102,8 @@
   ],
   "upcoming_catalysts": [
     {
-      "date": "2026-05-25",
-      "days_out": 1,
-      "sport": "Basketball",
-      "kind": "draft",
-      "title": "2026 NBA Draft Lottery",
-      "expected_move": "+10% to +30%"
-    },
-    {
       "date": "2026-06-23",
-      "days_out": 30,
+      "days_out": 23,
       "sport": "Basketball",
       "kind": "draft",
       "title": "2026 NBA Draft",
@@ -119,7 +111,7 @@
     },
     {
       "date": "2026-06-19",
-      "days_out": 26,
+      "days_out": 19,
       "sport": "Baseball",
       "kind": "release",
       "title": "2026 Bowman Chrome Drops",
