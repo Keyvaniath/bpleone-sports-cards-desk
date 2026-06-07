@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-31T23:02:54Z",
+  "generated_at": "2026-06-07T23:08:16Z",
   "card_count": 158,
   "live_count": 3,
   "verdict_counts": {
     "STRONG BUY": 0,
     "BUY": 24,
-    "HOLD": 99,
-    "TRIM": 35,
+    "HOLD": 98,
+    "TRIM": 36,
     "SELL": 0
   },
   "top_buys": [
@@ -25,6 +25,22 @@
       "verdict": "BUY",
       "composite": 77.4,
       "ebay_query": "2024 Panini Prizm Draft Picks Julian Sayin PSA 10"
+    },
+    {
+      "id": "B001",
+      "player": "Paul Skenes",
+      "sport": "Baseball",
+      "set_year": "2024 Topps Chrome Update",
+      "grade": "PSA 10",
+      "anchor": 280,
+      "live": 206.5,
+      "trend30d": 12.0,
+      "t_buy": 200,
+      "t_sell": 450,
+      "pop": 1850,
+      "verdict": "BUY",
+      "composite": 77.3,
+      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
     },
     {
       "id": "K039",
@@ -137,22 +153,6 @@
       "verdict": "BUY",
       "composite": 72.5,
       "ebay_query": "2025 Bowman University Chrome JuJu Watkins PSA 10"
-    },
-    {
-      "id": "B001",
-      "player": "Paul Skenes",
-      "sport": "Baseball",
-      "set_year": "2024 Topps Chrome Update",
-      "grade": "PSA 10",
-      "anchor": 280,
-      "live": 178.75,
-      "trend30d": 12.0,
-      "t_buy": 200,
-      "t_sell": 450,
-      "pop": 1850,
-      "verdict": "BUY",
-      "composite": 72.2,
-      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
     },
     {
       "id": "B020",
