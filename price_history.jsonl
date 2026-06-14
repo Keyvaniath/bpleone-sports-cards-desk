@@ -9,3 +9,6 @@
 {"card_id": "B001", "date": "2026-06-07", "median": 206.5, "n": 8, "source": "ebay"}
 {"card_id": "B002", "date": "2026-06-07", "median": 224.5, "n": 5, "source": "ebay"}
 {"card_id": "B005", "date": "2026-06-07", "median": 41.0, "n": 5, "source": "ebay"}
+{"card_id": "B001", "date": "2026-06-14", "median": 142.25, "n": 6, "source": "ebay"}
+{"card_id": "B002", "date": "2026-06-14", "median": 257.92, "n": 5, "source": "ebay"}
+{"card_id": "B006", "date": "2026-06-14", "median": 47.5, "n": 8, "source": "ebay"}
