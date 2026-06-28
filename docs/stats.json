@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T23:15:14Z",
+  "generated_at": "2026-06-28T23:05:51Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -7,16 +7,16 @@
   "catalyst_count": 14,
   "total_book_value": 1454270,
   "verdict_counts": {
-    "BUY": 23,
-    "HOLD": 100,
+    "BUY": 24,
+    "HOLD": 99,
     "TRIM": 35
   },
   "by_sport": {
     "Baseball": {
       "count": 45,
       "book_value": 340525,
-      "buys": 4,
-      "avg_score": 56.8,
+      "buys": 5,
+      "avg_score": 57.3,
       "trend30d_avg": 9.1
     },
     "Football": {
@@ -100,14 +100,5 @@
       "trend30d": -20.0
     }
   ],
-  "upcoming_catalysts": [
-    {
-      "date": "2026-06-23",
-      "days_out": 2,
-      "sport": "Basketball",
-      "kind": "draft",
-      "title": "2026 NBA Draft",
-      "expected_move": "+20% to +60%"
-    }
-  ]
+  "upcoming_catalysts": []
 }
