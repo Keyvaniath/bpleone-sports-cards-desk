@@ -20,3 +20,8 @@
 {"card_id": "B002", "date": "2026-06-28", "median": 125.0, "n": 3, "source": "ebay"}
 {"card_id": "B003", "date": "2026-06-28", "median": 35.0, "n": 5, "source": "ebay"}
 {"card_id": "B007", "date": "2026-06-28", "median": 74.0, "n": 6, "source": "ebay"}
+{"card_id": "B001", "date": "2026-07-12", "median": 164.0, "n": 7, "source": "ebay"}
+{"card_id": "B002", "date": "2026-07-12", "median": 147.0, "n": 2, "source": "ebay"}
+{"card_id": "B003", "date": "2026-07-12", "median": 28.57, "n": 5, "source": "ebay"}
+{"card_id": "B004", "date": "2026-07-12", "median": 610.0, "n": 5, "source": "ebay"}
+{"card_id": "B009", "date": "2026-07-12", "median": 579.99, "n": 6, "source": "ebay"}

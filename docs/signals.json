@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-05T23:04:03Z",
+  "generated_at": "2026-07-12T22:49:53Z",
   "card_count": 158,
-  "live_count": 0,
+  "live_count": 5,
   "verdict_counts": {
     "STRONG BUY": 0,
-    "BUY": 23,
+    "BUY": 24,
     "HOLD": 99,
-    "TRIM": 36,
+    "TRIM": 35,
     "SELL": 0
   },
   "top_buys": [
