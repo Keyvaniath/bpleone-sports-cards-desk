@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-07-12T22:49:53Z",
+  "generated_at": "2026-07-19T22:55:33Z",
   "card_count": 158,
-  "live_count": 5,
+  "live_count": 10,
   "verdict_counts": {
     "STRONG BUY": 0,
-    "BUY": 24,
-    "HOLD": 99,
+    "BUY": 26,
+    "HOLD": 97,
     "TRIM": 35,
     "SELL": 0
   },
@@ -25,6 +25,22 @@
       "verdict": "BUY",
       "composite": 77.4,
       "ebay_query": "2024 Panini Prizm Draft Picks Julian Sayin PSA 10"
+    },
+    {
+      "id": "B012",
+      "player": "Bobby Witt Jr.",
+      "sport": "Baseball",
+      "set_year": "2022 Topps Chrome Update",
+      "grade": "PSA 10",
+      "anchor": 220,
+      "live": 174.5,
+      "trend30d": 18.0,
+      "t_buy": 170,
+      "t_sell": 380,
+      "pop": 1900,
+      "verdict": "BUY",
+      "composite": 76.7,
+      "ebay_query": "2022 Topps Chrome Update Bobby Witt Jr RC PSA 10"
     },
     {
       "id": "K039",
@@ -123,6 +139,22 @@
       "ebay_query": "2024 Bowman Chrome Prospects Konnor Griffin BCP-44 PSA 10"
     },
     {
+      "id": "B001",
+      "player": "Paul Skenes",
+      "sport": "Baseball",
+      "set_year": "2024 Topps Chrome Update",
+      "grade": "PSA 10",
+      "anchor": 280,
+      "live": 173.34,
+      "trend30d": 12.0,
+      "t_buy": 200,
+      "t_sell": 450,
+      "pop": 1850,
+      "verdict": "BUY",
+      "composite": 74.6,
+      "ebay_query": "2024 Topps Chrome Update Paul Skenes RC PSA 10"
+    },
+    {
       "id": "K031",
       "player": "JuJu Watkins",
       "sport": "Basketball",
@@ -169,38 +201,6 @@
       "verdict": "BUY",
       "composite": 72.2,
       "ebay_query": "2022 Topps Chrome Tennis Carlos Alcaraz RC 1 PSA 10"
-    },
-    {
-      "id": "K027",
-      "player": "Paige Bueckers",
-      "sport": "Basketball",
-      "set_year": "2025 Panini Prizm WNBA",
-      "grade": "PSA 10",
-      "anchor": 280,
-      "live": null,
-      "trend30d": 55.0,
-      "t_buy": 210,
-      "t_sell": 500,
-      "pop": 600,
-      "verdict": "BUY",
-      "composite": 71.8,
-      "ebay_query": "2025 Panini Prizm WNBA Paige Bueckers RC 1 PSA 10"
-    },
-    {
-      "id": "F046",
-      "player": "Travis Hunter",
-      "sport": "Football",
-      "set_year": "2024 Panini Prizm Draft Picks",
-      "grade": "PSA 10",
-      "anchor": 130,
-      "live": null,
-      "trend30d": 45.0,
-      "t_buy": 95,
-      "t_sell": 240,
-      "pop": 900,
-      "verdict": "BUY",
-      "composite": 71.8,
-      "ebay_query": "2024 Panini Prizm Draft Picks Travis Hunter Colorado PSA 10"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-12T22:49:53Z",
+  "generated_at": "2026-07-19T22:55:33Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -7,16 +7,16 @@
   "catalyst_count": 14,
   "total_book_value": 1454270,
   "verdict_counts": {
-    "BUY": 24,
-    "HOLD": 99,
+    "BUY": 26,
+    "HOLD": 97,
     "TRIM": 35
   },
   "by_sport": {
     "Baseball": {
       "count": 45,
       "book_value": 340525,
-      "buys": 5,
-      "avg_score": 57.1,
+      "buys": 7,
+      "avg_score": 57.7,
       "trend30d_avg": 9.1
     },
     "Football": {
@@ -103,7 +103,7 @@
   "upcoming_catalysts": [
     {
       "date": "2026-07-30",
-      "days_out": 18,
+      "days_out": 11,
       "sport": "Baseball",
       "kind": "trade_window",
       "title": "MLB Trade Deadline",
