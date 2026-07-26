@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-19T22:55:33Z",
+  "generated_at": "2026-07-26T23:02:15Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -7,16 +7,16 @@
   "catalyst_count": 14,
   "total_book_value": 1454270,
   "verdict_counts": {
-    "BUY": 26,
-    "HOLD": 97,
-    "TRIM": 35
+    "BUY": 23,
+    "HOLD": 99,
+    "TRIM": 36
   },
   "by_sport": {
     "Baseball": {
       "count": 45,
       "book_value": 340525,
-      "buys": 7,
-      "avg_score": 57.7,
+      "buys": 4,
+      "avg_score": 56.6,
       "trend30d_avg": 9.1
     },
     "Football": {
@@ -103,11 +103,19 @@
   "upcoming_catalysts": [
     {
       "date": "2026-07-30",
-      "days_out": 11,
+      "days_out": 4,
       "sport": "Baseball",
       "kind": "trade_window",
       "title": "MLB Trade Deadline",
       "expected_move": "\u00b110% to \u00b130%"
+    },
+    {
+      "date": "2026-08-23",
+      "days_out": 28,
+      "sport": "Football",
+      "kind": "season",
+      "title": "College Football Season Opener",
+      "expected_move": "+10% to +25%"
     }
   ]
 }
