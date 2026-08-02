@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T23:02:15Z",
+  "generated_at": "2026-08-02T22:58:04Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -102,16 +102,8 @@
   ],
   "upcoming_catalysts": [
     {
-      "date": "2026-07-30",
-      "days_out": 4,
-      "sport": "Baseball",
-      "kind": "trade_window",
-      "title": "MLB Trade Deadline",
-      "expected_move": "\u00b110% to \u00b130%"
-    },
-    {
       "date": "2026-08-23",
-      "days_out": 28,
+      "days_out": 21,
       "sport": "Football",
       "kind": "season",
       "title": "College Football Season Opener",
