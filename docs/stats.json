@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T22:22:55Z",
+  "generated_at": "2026-08-31T00:16:29Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -103,19 +103,19 @@
   "upcoming_catalysts": [
     {
       "date": "2026-09-04",
-      "days_out": 12,
+      "days_out": 4,
       "sport": "Football",
       "kind": "season",
       "title": "NFL Season Opener",
       "expected_move": "+5% to +20%"
     },
     {
-      "date": "2026-08-23",
-      "days_out": 0,
-      "sport": "Football",
+      "date": "2026-09-28",
+      "days_out": 28,
+      "sport": "Baseball",
       "kind": "season",
-      "title": "College Football Season Opener",
-      "expected_move": "+10% to +25%"
+      "title": "MLB Regular Season Ends",
+      "expected_move": "+5% to +15%"
     }
   ]
 }
