@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-31T00:16:29Z",
+  "generated_at": "2026-09-06T23:32:10Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -102,16 +102,8 @@
   ],
   "upcoming_catalysts": [
     {
-      "date": "2026-09-04",
-      "days_out": 4,
-      "sport": "Football",
-      "kind": "season",
-      "title": "NFL Season Opener",
-      "expected_move": "+5% to +20%"
-    },
-    {
       "date": "2026-09-28",
-      "days_out": 28,
+      "days_out": 22,
       "sport": "Baseball",
       "kind": "season",
       "title": "MLB Regular Season Ends",
