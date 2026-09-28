@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-20T23:55:13Z",
+  "generated_at": "2026-09-28T00:22:15Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -103,11 +103,19 @@
   "upcoming_catalysts": [
     {
       "date": "2026-09-28",
-      "days_out": 8,
+      "days_out": 0,
       "sport": "Baseball",
       "kind": "season",
       "title": "MLB Regular Season Ends",
       "expected_move": "+5% to +15%"
+    },
+    {
+      "date": "2026-10-27",
+      "days_out": 29,
+      "sport": "Baseball",
+      "kind": "playoff",
+      "title": "World Series Game 1",
+      "expected_move": "+15% to +50%"
     }
   ]
 }
