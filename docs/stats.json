@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-18T23:58:31Z",
+  "generated_at": "2026-10-25T23:52:14Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -103,7 +103,7 @@
   "upcoming_catalysts": [
     {
       "date": "2026-10-27",
-      "days_out": 9,
+      "days_out": 2,
       "sport": "Baseball",
       "kind": "playoff",
       "title": "World Series Game 1",
@@ -111,7 +111,7 @@
     },
     {
       "date": "2026-11-15",
-      "days_out": 28,
+      "days_out": 21,
       "sport": "Basketball",
       "kind": "season",
       "title": "College Basketball Top-25 Matchups",
