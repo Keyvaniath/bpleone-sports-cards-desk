@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T01:19:32Z",
+  "generated_at": "2026-11-09T01:29:12Z",
   "card_count": 158,
   "parallel_count": 36,
   "sealed_count": 17,
@@ -103,11 +103,19 @@
   "upcoming_catalysts": [
     {
       "date": "2026-11-15",
-      "days_out": 13,
+      "days_out": 6,
       "sport": "Basketball",
       "kind": "season",
       "title": "College Basketball Top-25 Matchups",
       "expected_move": "+5% to +20%"
+    },
+    {
+      "date": "2026-12-04",
+      "days_out": 25,
+      "sport": "Football",
+      "kind": "release",
+      "title": "2026 Panini National Treasures Football",
+      "expected_move": "+15% to +30% (when announced)"
     }
   ]
 }
